@@ -1,34 +1,28 @@
-package com.nickaknudson.android;
-
-import java.util.Observable;
-import java.util.Observer;
+package com.nickaknudson.mva;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public abstract class Controller<T extends Model> {
-	protected static final String TAG = Controller.class.getSimpleName();
+public abstract class Adapter {
+	protected static final String TAG = Adapter.class.getSimpleName();
 
-	private T model;
 	private View view;
 	private Activity activity;
 	
-	public Controller(Activity activity, T model, ViewGroup root, boolean attachToRoot) {
+	public Adapter(Activity activity, ViewGroup root, boolean attachToRoot) {
 		setActivity(activity);
 		generateViewTS(activity.getLayoutInflater(), root, attachToRoot);
-		setModel(model);
 	}
 	
-	public Controller(Activity activity, T model, View convertView) {
+	public Adapter(Activity activity, View convertView) {
 		setActivity(activity);
-		view = convertView;
-		setModel(model);
+		setView(convertView);
 	}
-
-	public T getObject() {
-		return model;
+	
+	protected Activity getActivity() {
+		return activity;
 	}
 
 	public View getView() {
@@ -38,33 +32,12 @@ public abstract class Controller<T extends Model> {
 	public void setActivity(Activity a) {
 		activity = a;
 	}
-	
-	public void setModel(T m) {
-		// remove old reference
-		if(model != null) model.deleteObserver(objectObserver);
-		// add observer and set object
-		model = m;
-		if(model != null) model.addObserver(objectObserver);
-		fillViewTS(model);
-	}
 
 	public void setView(View view) {
 		this.view = view;
 		// if the passed a new convertable view, fill it
-		fillViewTS(model);
+		fillViewTS();
 	}
-	
-	protected void onUpdate(T model, Object data) {
-		fillViewTS(model);
-	}
-	
-	private Observer objectObserver = new Observer(){
-		@Override
-		@SuppressWarnings("unchecked")
-		public void update(Observable object, Object data) {
-			onUpdate((T) object, data);
-		}
-	};
 	
 	/*
 	 * Thread Safe Method - Generate View
@@ -90,7 +63,8 @@ public abstract class Controller<T extends Model> {
 		
 		@Override
 		public void run() {
-			view = generateView(layoutInflater, root, attachToRoot);
+			View v = generateView(layoutInflater, root, attachToRoot);
+			setView(v);
 		}
 	}
 
@@ -98,23 +72,23 @@ public abstract class Controller<T extends Model> {
 	 * Thread Safe Method - Fill View
 	 * here is where we do everything important
 	 */
-	abstract protected View fillView(T model);
+	protected View fillView() {
+		synchronized(view) {
+			return fillView(view);
+		}
+	}
 	
-	protected void fillViewTS(T m) {
-		activity.runOnUiThread(new FillViewRunnable(m));
+	abstract protected View fillView(View view);
+	
+	protected void fillViewTS() {
+		activity.runOnUiThread(new FillViewRunnable());
 	}
 	
 	protected class FillViewRunnable implements Runnable {
 		
-		private T model;
-		
-		public FillViewRunnable(T m) {
-			model = m;
-		}
-		
 		@Override
 		public void run() {
-			fillView(model);
+			fillView();
 		}
 	}
 }

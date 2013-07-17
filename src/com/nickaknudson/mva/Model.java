@@ -1,7 +1,17 @@
-package com.nickaknudson.android;
+package com.nickaknudson.mva;
 
-public abstract class Model extends java.util.Observable {
+public abstract class Model extends Observable {
 	protected static final String TAG = Model.class.getSimpleName();
+	
+	transient private boolean _new = true;
+
+	public boolean isNew() {
+		return _new;
+	}
+
+	protected void setNew(boolean n) {
+		_new = n;
+	}
 
 	// remember to call setChanged()
 	public abstract void set(Model object);

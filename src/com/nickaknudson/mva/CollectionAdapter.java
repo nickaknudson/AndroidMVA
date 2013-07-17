@@ -1,4 +1,4 @@
-package com.nickaknudson.android;
+package com.nickaknudson.mva;
 
 import java.util.Observable;
 import java.util.Observer;
