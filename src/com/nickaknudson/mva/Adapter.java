@@ -36,6 +36,10 @@ public abstract class Adapter {
 	public void setView(View view) {
 		this.view = view;
 		// if the passed a new convertable view, fill it
+		refresh();
+	}
+	
+	protected void refresh() {
 		fillViewTS();
 	}
 	
@@ -49,7 +53,7 @@ public abstract class Adapter {
 		activity.runOnUiThread(new GenerateViewRunnable(i, p, a));
 	}
 	
-	protected class GenerateViewRunnable implements Runnable {
+	private class GenerateViewRunnable implements Runnable {
 		
 		private LayoutInflater layoutInflater;
 		private ViewGroup root;
@@ -80,7 +84,7 @@ public abstract class Adapter {
 	
 	abstract protected View fillView(View view);
 	
-	protected void fillViewTS() {
+	private void fillViewTS() {
 		activity.runOnUiThread(new FillViewRunnable());
 	}
 	

@@ -1,7 +1,9 @@
-package com.nickaknudson.mva;
+package com.nickaknudson.mva.adapters;
 
 import java.util.Observable;
 import java.util.Observer;
+
+import com.nickaknudson.mva.Collection;
 
 import android.app.Activity;
 import android.view.View;

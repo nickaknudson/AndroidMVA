@@ -2,18 +2,11 @@ package com.nickaknudson.mva.clients;
 
 import java.util.concurrent.Future;
 
-import android.content.Context;
-
 import com.nickaknudson.mva.Client;
 import com.nickaknudson.mva.Model;
 
-public abstract class CRUDClient<T extends Model> extends Client<T> {
-
-
-	public CRUDClient(Context context) {
-		super(context);
-		// TODO Auto-generated constructor stub
-	}
+public abstract class CRUDClient<T extends Model> implements Client {
+	protected static final String TAG = CRUDClient.class.getSimpleName();
 	
 	public abstract Future<T> create(T model);
 	public abstract Future<T> read(T model);

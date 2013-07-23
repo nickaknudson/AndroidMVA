@@ -33,7 +33,7 @@ public abstract class ModelAdapter<T extends Model> extends Adapter {
 		// add observer and set object
 		model = m;
 		if(model != null) model.addObserver(objectObserver);
-		fillViewTS();
+		refresh();
 	}
 	
 	private Observer<T> objectObserver = new Observer<T>(){
@@ -44,14 +44,12 @@ public abstract class ModelAdapter<T extends Model> extends Adapter {
 	};
 	
 	protected void onUpdate(T model, Object data) {
-		fillViewTS();
+		refresh();
 	}
 
 	@Override
 	protected View fillView(View view) {
-		synchronized(model) {
-			return fillView(view, model);
-		}
+		return fillView(view, model);
 	}
 	
 	abstract protected View fillView(View view, T model);
