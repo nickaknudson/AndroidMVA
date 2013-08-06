@@ -1,15 +1,15 @@
 package com.nickaknudson.mva.clients;
 
-import java.util.concurrent.Future;
-
 import com.nickaknudson.mva.Client;
 import com.nickaknudson.mva.Model;
+import com.nickaknudson.mva.callbacks.CreateCallback;
+import com.nickaknudson.mva.callbacks.DeleteCallback;
+import com.nickaknudson.mva.callbacks.ReadCallback;
+import com.nickaknudson.mva.callbacks.UpdateCallback;
 
-public abstract class CRUDClient<T extends Model> implements Client {
-	protected static final String TAG = CRUDClient.class.getSimpleName();
-	
-	public abstract Future<T> create(T model);
-	public abstract Future<T> read(T model);
-	public abstract Future<T> update(T model);
-	public abstract Future<Boolean> destroy(T model);
+public interface CRUDClient<T extends Model<T>> extends Client {
+	public abstract void create(T model, CreateCallback<T> callback);
+	public abstract void read(T model, ReadCallback<T> callback);
+	public abstract void update(T model, UpdateCallback<T> callback);
+	public abstract void destroy(T model, DeleteCallback callback);
 }

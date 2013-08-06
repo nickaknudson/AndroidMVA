@@ -1,6 +1,6 @@
 package com.nickaknudson.mva;
 
-public abstract class Model extends Observable {
+public abstract class Model<M extends Model<M>> extends Observable {
 	protected static final String TAG = Model.class.getSimpleName();
 	
 	transient private boolean _new = true;
@@ -13,13 +13,11 @@ public abstract class Model extends Observable {
 		_new = n;
 	}
 
-	// remember to call setChanged()
-	public abstract void set(Model object);
-	
-	public void set(Model object, boolean notify) {
-		set(object);
-		if(notify) notifyObservers();
-	}
+	/**
+	 * Remember to call setChanged() or setChangedAndNotify() if the model has changed
+	 * @param model
+	 */
+	public abstract void set(M model);
 	
 	protected void setChangedAndNotify(Object data) {
 		setChanged();

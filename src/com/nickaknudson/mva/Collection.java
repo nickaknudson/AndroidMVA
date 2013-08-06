@@ -158,6 +158,7 @@ public class Collection<T> extends Observable implements java.util.List<T> {
 	}
 
 	@Override
+	@SuppressWarnings("hiding")
 	public <T> T[] toArray(T[] array) {
 		return collection.toArray(array);
 	}

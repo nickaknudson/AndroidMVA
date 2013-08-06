@@ -1,11 +1,12 @@
 package com.nickaknudson.mva.clients;
 
 import com.nickaknudson.mva.Client;
-import com.nickaknudson.mva.Model;
+import com.nickaknudson.mva.callbacks.PersistentCallback;
 
-public interface PersistentClient<T extends Model> extends Client {	
-	public abstract void connect(final PersistentClientCallback callback);
-	public abstract boolean removePersistentClientCallback(PersistentClientCallback callback);
+public interface PersistentClient extends Client {	
+	public abstract void connect(final PersistentCallback callback);
+	public abstract boolean addConnectCallback(PersistentCallback callback);
+	public abstract boolean removeConnectCallback(PersistentCallback callback);
 	public abstract void disconnect();
 	public abstract boolean isConnected();
 }

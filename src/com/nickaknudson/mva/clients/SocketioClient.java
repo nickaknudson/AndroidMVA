@@ -17,31 +17,35 @@ import com.koushikdutta.async.http.socketio.EventCallback;
 import com.koushikdutta.async.http.socketio.SocketIOClient;
 import com.koushikdutta.async.http.socketio.SocketIORequest;
 import com.nickaknudson.mva.Model;
+import com.nickaknudson.mva.callbacks.PersistentCallback;
+import com.nickaknudson.mva.callbacks.PersistentCallbackManager;
+import com.nickaknudson.mva.callbacks.ReceiveCallback;
+import com.nickaknudson.mva.callbacks.ReceiveCallbackManager;
 
-public abstract class SocketioClient<T extends Model> implements SRClient<T>, PersistentClient<T> {
+public abstract class SocketioClient<T extends Model<T>> implements SRClient<T>, PersistentClient {
 
 	protected SocketIOClient socketIOClient;
 	private String uri;
 	private Gson gson;
 	private String name;
-	private PersistentClientCallbackManager pccallbacks;
-	private SRClientCallbackManager<T> srcallbacks;
+	private PersistentCallbackManager pcallbacks;
+	private ReceiveCallbackManager<T> rcallbacks;
 
 	public SocketIOClient getSocketIOClient() {
 		return socketIOClient;
 	}
 	
 	public SocketioClient(String uri, String name) {
-		pccallbacks = new PersistentClientCallbackManager();
-		srcallbacks = new SRClientCallbackManager<T>();
-		this.name = name;
+		pcallbacks = new PersistentCallbackManager();
+		rcallbacks = new ReceiveCallbackManager<T>();
+		this.name = name; // TODO
 		this.uri = uri;
 		gson = new Gson();
 	}
 
 	@Override
-	public void connect(final PersistentClientCallback callback) {
-		pccallbacks.add(callback);
+	public void connect(final PersistentCallback callback) {
+		addConnectCallback(callback);
         SocketIORequest req = new SocketIORequest(uri);
         req.setLogging("Socket.IO", Log.VERBOSE);
         SocketIOClient.connect(AsyncHttpClient.getDefaultInstance(), req, new ConnectCallback() {
@@ -53,23 +57,28 @@ public abstract class SocketioClient<T extends Model> implements SRClient<T>, Pe
 
 					@Override
 					public void onDisconnect(Exception e) {
-						pccallbacks.onDisconnected(e);
+						pcallbacks.onDisconnected(e);
 					}
     			});
-    			pccallbacks.onConnected(ex);
+    			pcallbacks.onConnected(ex);
     		}
         });
 	}
 	
 	@Override
-	public boolean removePersistentClientCallback(PersistentClientCallback callback) {
-		return pccallbacks.remove(callback);
+	public boolean addConnectCallback(PersistentCallback callback) {
+		return pcallbacks.add(callback);
+	}
+	
+	@Override
+	public boolean removeConnectCallback(PersistentCallback callback) {
+		return pcallbacks.remove(callback);
 	}
 
 	@Override
 	public void disconnect() {
-		if(getSocketIOClient() != null) {
-			getSocketIOClient().disconnect();
+		if(socketIOClient != null) {
+			socketIOClient.disconnect();
 		} else {
 			// TODO
 		}
@@ -77,19 +86,19 @@ public abstract class SocketioClient<T extends Model> implements SRClient<T>, Pe
 
 	@Override
 	public boolean isConnected() {
-		if(getSocketIOClient() != null) {
-			return getSocketIOClient().isConnected();
+		if(socketIOClient != null) {
+			return socketIOClient.isConnected();
 		} else {
 			return false;
 		}
 	}
 	
-	public void send(T model) {
-		if(getSocketIOClient() != null) {
+	public void send(T model) { // TODO name
+		if(socketIOClient != null) {
 			try {
 				String json = gson.toJson(model, getType());
 				JSONArray args = new JSONArray("[" + json + "]");
-				getSocketIOClient().emit(name, args, new Acknowledge() {
+				socketIOClient.emit(name, args, new Acknowledge() {
 					@Override
 					public void acknowledge(JSONArray arguments) {
 						// TODO Auto-generated method stub
@@ -103,10 +112,10 @@ public abstract class SocketioClient<T extends Model> implements SRClient<T>, Pe
 	}
 
 	@Override
-	public void recieve(final SRClientCallback<T> callback) {
-		srcallbacks.add(callback);
-		if(getSocketIOClient() != null) {
-			getSocketIOClient().on(name, new EventCallback() {
+	public void receive(final ReceiveCallback<T> callback) { // TODO name
+		addReceiveCallback(callback);
+		if(socketIOClient != null) {
+			socketIOClient.on(name, new EventCallback() {
 				
 				@Override
 				public void onEvent(JSONArray argument, Acknowledge acknowledge) {
@@ -115,7 +124,7 @@ public abstract class SocketioClient<T extends Model> implements SRClient<T>, Pe
 							JSONObject obj = argument.getJSONObject(0);
 							String json = obj.toString();
 							T model = gson.fromJson(json, getType());
-							srcallbacks.onRecieve(model);
+							rcallbacks.onReceive(model);
 						}
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
@@ -131,8 +140,13 @@ public abstract class SocketioClient<T extends Model> implements SRClient<T>, Pe
 	}
 	
 	@Override
-	public boolean removeSRClientCallback(SRClientCallback<T> callback) {
-		return srcallbacks.remove(callback);
+	public boolean addReceiveCallback(ReceiveCallback<T> callback) {
+		return rcallbacks.add(callback);
+	}
+	
+	@Override
+	public boolean removeReceiveCallback(ReceiveCallback<T> callback) {
+		return rcallbacks.remove(callback);
 	}
 	
 	public abstract Type getType();

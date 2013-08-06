@@ -7,20 +7,24 @@ import com.google.gson.Gson;
 import com.nickaknudson.android.bluetooth.BluetoothConnection;
 import com.nickaknudson.android.bluetooth.BluetoothConnectionCallback;
 import com.nickaknudson.mva.Model;
+import com.nickaknudson.mva.callbacks.PersistentCallback;
+import com.nickaknudson.mva.callbacks.PersistentCallbackManager;
+import com.nickaknudson.mva.callbacks.ReceiveCallback;
+import com.nickaknudson.mva.callbacks.ReceiveCallbackManager;
 
-public abstract class BluetoothClient<T extends Model> implements SRClient<T>, PersistentClient<T> {
+public abstract class BluetoothClient<T extends Model<T>> implements SRClient<T>, PersistentClient {
 
 	private BluetoothDevice device;
 	private boolean secure;
 	private BluetoothConnection bluetoothConnection;
 	protected boolean connected = false;
 	private Gson gson;
-	private PersistentClientCallbackManager pccallbacks;
-	private SRClientCallbackManager<T> srcallbacks;
+	private PersistentCallbackManager pcallbacks;
+	private ReceiveCallbackManager<T> rcallbacks;
 
 	public BluetoothClient(BluetoothDevice device, boolean secure) {
-		pccallbacks = new PersistentClientCallbackManager();
-		srcallbacks = new SRClientCallbackManager<T>();
+		pcallbacks = new PersistentCallbackManager();
+		rcallbacks = new ReceiveCallbackManager<T>();
 		bluetoothConnection = new BluetoothConnection();
 		this.device = device;
 		this.secure = secure;
@@ -32,8 +36,8 @@ public abstract class BluetoothClient<T extends Model> implements SRClient<T>, P
 	}
 
 	@Override
-	public void connect(final PersistentClientCallback callback) {
-		pccallbacks.add(callback);
+	public void connect(final PersistentCallback callback) {
+		addConnectCallback(callback);
 		start();
 		if(device != null) {
 			bluetoothConnection.connect(device, secure, bluetoothConnectionCallback);
@@ -41,8 +45,13 @@ public abstract class BluetoothClient<T extends Model> implements SRClient<T>, P
 	}
 	
 	@Override
-	public boolean removePersistentClientCallback(PersistentClientCallback callback) {
-		return pccallbacks.remove(callback);
+	public boolean addConnectCallback(PersistentCallback callback) {
+		return pcallbacks.add(callback);
+	}
+	
+	@Override
+	public boolean removeConnectCallback(PersistentCallback callback) {
+		return pcallbacks.remove(callback);
 	}
 
 	@Override
@@ -64,13 +73,18 @@ public abstract class BluetoothClient<T extends Model> implements SRClient<T>, P
 	}
 
 	@Override
-	public void recieve(final SRClientCallback<T> callback) {
-		srcallbacks.add(callback);
+	public void receive(final ReceiveCallback<T> callback) {
+		addReceiveCallback(callback);
 	}
 	
 	@Override
-	public boolean removeSRClientCallback(SRClientCallback<T> callback) {
-		return srcallbacks.remove(callback);
+	public boolean addReceiveCallback(ReceiveCallback<T> callback) {
+		return rcallbacks.add(callback);
+	}
+	
+	@Override
+	public boolean removeReceiveCallback(ReceiveCallback<T> callback) {
+		return rcallbacks.remove(callback);
 	}
 	
 	private BluetoothConnectionCallback bluetoothConnectionCallback = new BluetoothConnectionCallback() {
@@ -78,19 +92,19 @@ public abstract class BluetoothClient<T extends Model> implements SRClient<T>, P
 		@Override
 		public void onConnection(BluetoothConnection connection) {
 			connected = true;
-			pccallbacks.onConnected(null);
+			pcallbacks.onConnected(null);
 		}
 
 		@Override
 		public void onFailed(BluetoothConnection connection) {
 			connected = false;
-			pccallbacks.onDisconnected(null); // TODO
+			pcallbacks.onDisconnected(null); // TODO
 		}
 
 		@Override
 		public void onLost(BluetoothConnection connection) {
 			connected = false;
-			pccallbacks.onDisconnected(null); // TODO
+			pcallbacks.onDisconnected(null); // TODO
 		}
 
 		@Override
@@ -99,7 +113,7 @@ public abstract class BluetoothClient<T extends Model> implements SRClient<T>, P
 				if(bytes > 0 && buffer != null && buffer.length >= 1) {
 					String message = new String(buffer, 0 , bytes);
 					T model = gson.fromJson(message, getType());
-					srcallbacks.onRecieve(model);
+					rcallbacks.onReceive(model);
 				}
 			} catch(ClassCastException e) {
 				// TODO

@@ -29,5 +29,11 @@ public abstract class ClientAdapter<C extends Client> extends Adapter {
 		client = c;
 		refresh();
 	}
+
+	@Override
+	protected View fillView(View view) {
+		return fillView(view, client);
+	}
 	
+	protected abstract View fillView(View view, C client);
 }
