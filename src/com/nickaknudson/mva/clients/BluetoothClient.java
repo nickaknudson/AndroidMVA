@@ -92,19 +92,19 @@ public abstract class BluetoothClient<T extends Model<T>> implements SRClient<T>
 		@Override
 		public void onConnection(BluetoothConnection connection) {
 			connected = true;
-			pcallbacks.onConnected(null);
+			pcallbacks.onConnected();
 		}
 
 		@Override
 		public void onFailed(BluetoothConnection connection) {
 			connected = false;
-			pcallbacks.onDisconnected(null); // TODO
+			pcallbacks.onDisconnected(); // TODO
 		}
 
 		@Override
 		public void onLost(BluetoothConnection connection) {
 			connected = false;
-			pcallbacks.onDisconnected(null); // TODO
+			pcallbacks.onDisconnected(); // TODO
 		}
 
 		@Override
@@ -122,6 +122,9 @@ public abstract class BluetoothClient<T extends Model<T>> implements SRClient<T>
 			}
 		}
     };
-    
-    public abstract Type getType();
+
+	@Override
+	public Type getType() {
+		return getTypeToken().getType();
+	}
 }

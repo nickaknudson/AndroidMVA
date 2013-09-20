@@ -104,5 +104,8 @@ public abstract class AndroidAsyncCRUDClient<T extends Model<T>> implements CRUD
 		});
 	}
 
-	protected abstract Type getType();
+	@Override
+	public Type getType() {
+		return getTypeToken().getType();
+	}
 }
