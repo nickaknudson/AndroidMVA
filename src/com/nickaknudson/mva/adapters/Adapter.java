@@ -1,4 +1,4 @@
-package com.nickaknudson.mva;
+package com.nickaknudson.mva.adapters;
 
 import android.app.Activity;
 import android.view.LayoutInflater;

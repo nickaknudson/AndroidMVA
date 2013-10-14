@@ -4,7 +4,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 
-public class CallbackManager<C> {
+
+public class CallbackManager<C extends Callback> {
 	
 	private LinkedList<C> callbacks = new LinkedList<C>();
 	
@@ -32,5 +33,13 @@ public class CallbackManager<C> {
 	        	}
 	        }
 		}
+	}
+	
+	public int count() {
+		return callbacks.size();
+	}
+	
+	public void removeAll() {
+		callbacks.clear();
 	}
 }

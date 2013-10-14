@@ -21,6 +21,7 @@ import com.nickaknudson.mva.callbacks.PersistentCallback;
 import com.nickaknudson.mva.callbacks.PersistentCallbackManager;
 import com.nickaknudson.mva.callbacks.ReceiveCallback;
 import com.nickaknudson.mva.callbacks.ReceiveCallbackManager;
+import com.nickaknudson.mva.callbacks.SendCallback;
 
 public abstract class SocketioClient<T extends Model<T>> implements SRClient<T>, PersistentClient {
 
@@ -34,7 +35,7 @@ public abstract class SocketioClient<T extends Model<T>> implements SRClient<T>,
 	}
 
 	public void connect(String uri, final PersistentCallback callback) {
-		addConnectCallback(callback);
+		add(callback);
         SocketIORequest req = new SocketIORequest(uri);
         req.setLogging("Socket.IO", Log.VERBOSE);
         SocketIOClient.connect(AsyncHttpClient.getDefaultInstance(), req, new ConnectCallback() {
@@ -63,12 +64,12 @@ public abstract class SocketioClient<T extends Model<T>> implements SRClient<T>,
 	}
 	
 	@Override
-	public boolean addConnectCallback(PersistentCallback callback) {
+	public boolean add(PersistentCallback callback) {
 		return pcallbacks.add(callback);
 	}
 	
 	@Override
-	public boolean removeConnectCallback(PersistentCallback callback) {
+	public boolean remove(PersistentCallback callback) {
 		return pcallbacks.remove(callback);
 	}
 
@@ -90,7 +91,7 @@ public abstract class SocketioClient<T extends Model<T>> implements SRClient<T>,
 		}
 	}
 	
-	public void send(String name, T model) { // TODO name
+	public void send(String name, final T model, final SendCallback<T> callback) { // TODO name
 		if(socketIOClient != null) {
 			try {
 				String json = gson.toJson(model, getType());
@@ -98,18 +99,18 @@ public abstract class SocketioClient<T extends Model<T>> implements SRClient<T>,
 				socketIOClient.emit(name, args, new Acknowledge() {
 					@Override
 					public void acknowledge(JSONArray arguments) {
-						// TODO Auto-generated method stub
+						// TODO parse arguments returned by acknowledge
+						if(callback != null) callback.onSend(model);
 					}
 				});
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				if(callback != null) callback.onError(e);
 			}
 		}
 	}
 
 	public void receive(String name, final ReceiveCallback<T> callback) { // TODO name
-		addReceiveCallback(callback);
+		add(callback);
 		if(socketIOClient != null) {
 			socketIOClient.on(name, new EventCallback() {
 				
@@ -136,12 +137,12 @@ public abstract class SocketioClient<T extends Model<T>> implements SRClient<T>,
 	}
 	
 	@Override
-	public boolean addReceiveCallback(ReceiveCallback<T> callback) {
+	public boolean add(ReceiveCallback<T> callback) {
 		return rcallbacks.add(callback);
 	}
 	
 	@Override
-	public boolean removeReceiveCallback(ReceiveCallback<T> callback) {
+	public boolean remove(ReceiveCallback<T> callback) {
 		return rcallbacks.remove(callback);
 	}
 

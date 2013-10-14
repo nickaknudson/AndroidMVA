@@ -1,4 +1,4 @@
-package com.nickaknudson.mva.clients;
+package com.nickaknudson.mva.clients.async;
 
 import java.lang.reflect.Type;
 import java.net.URI;
@@ -11,6 +11,7 @@ import com.koushikdutta.async.http.AsyncHttpRequest;
 import com.koushikdutta.async.http.AsyncHttpResponse;
 import com.nickaknudson.mva.Model;
 import com.nickaknudson.mva.callbacks.FetchCallback;
+import com.nickaknudson.mva.clients.FetchClient;
 
 public abstract class AndroidAsyncFetchClient<T extends Model<T>> implements FetchClient<T> {
 	

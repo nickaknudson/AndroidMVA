@@ -6,13 +6,14 @@ package com.nickaknudson.mva.clients;
 import java.lang.reflect.Type;
 
 import com.google.gson.reflect.TypeToken;
+import com.nickaknudson.mva.Collection;
 import com.nickaknudson.mva.Model;
 
 /**
  * @author nick
  *
  */
-public interface ModelClient<T extends Model<T>> extends Client {
+public interface CollectionClient<T extends Model<T>> extends Client {
 	abstract Type getType();
-	abstract TypeToken<T> getTypeToken();
+	abstract TypeToken<Collection<T>> getTypeToken();
 }

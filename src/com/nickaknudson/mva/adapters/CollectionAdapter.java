@@ -59,7 +59,7 @@ public abstract class CollectionAdapter<T> extends BaseAdapter {
 		return getView(activity, item, cV, r);
 	}
 	
-	public abstract View getView(Activity activity, T item, View convertView, ViewGroup root);
+	public abstract View getView(Activity activity, T model, View convertView, ViewGroup root);
 	
 	protected void onUpdate(Collection<T> observable, Object data) {
 		notifyDataSetChangedTS();

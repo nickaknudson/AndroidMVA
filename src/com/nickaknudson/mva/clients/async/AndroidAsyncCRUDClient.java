@@ -1,4 +1,4 @@
-package com.nickaknudson.mva.clients;
+package com.nickaknudson.mva.clients.async;
 
 import java.lang.reflect.Type;
 import java.net.URI;
@@ -10,13 +10,14 @@ import com.google.gson.Gson;
 import com.koushikdutta.async.http.AsyncHttpClient;
 import com.koushikdutta.async.http.AsyncHttpRequest;
 import com.koushikdutta.async.http.AsyncHttpResponse;
-import com.koushikdutta.async.http.JSONObjectBody;
+import com.koushikdutta.async.http.body.JSONObjectBody;
 import com.koushikdutta.async.http.callback.HttpConnectCallback;
 import com.nickaknudson.mva.Model;
 import com.nickaknudson.mva.callbacks.CreateCallback;
 import com.nickaknudson.mva.callbacks.DeleteCallback;
 import com.nickaknudson.mva.callbacks.ReadCallback;
 import com.nickaknudson.mva.callbacks.UpdateCallback;
+import com.nickaknudson.mva.clients.CRUDClient;
 
 public abstract class AndroidAsyncCRUDClient<T extends Model<T>> implements CRUDClient<T> {
 	

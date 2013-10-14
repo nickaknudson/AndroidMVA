@@ -14,7 +14,7 @@ public abstract class Model<M extends Model<M>> extends Observable {
 	}
 
 	/**
-	 * Remember to call setChanged() or setChangedAndNotify() if the model has changed
+	 * Remember to call set() if the model has changed
 	 * @param model
 	 */
 	public abstract void set(M model);
@@ -26,5 +26,9 @@ public abstract class Model<M extends Model<M>> extends Observable {
 	
 	protected void setChangedAndNotify() {
 		setChangedAndNotify(null);
+	}
+	
+	protected void set() { // TODO
+		setChangedAndNotify();
 	}
 }

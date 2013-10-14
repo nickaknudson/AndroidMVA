@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.nickaknudson.mva.clients;
+package com.nickaknudson.mva.clients.sqlite;
 
 import java.lang.reflect.Type;
 
@@ -11,6 +11,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.nickaknudson.mva.Model;
 import com.nickaknudson.mva.callbacks.PersistentCallback;
 import com.nickaknudson.mva.callbacks.PersistentCallbackManager;
+import com.nickaknudson.mva.clients.CRUDClient;
+import com.nickaknudson.mva.clients.PersistentClient;
 import com.nickaknudson.mva.exceptions.NotConnectedException;
 
 /**
@@ -29,7 +31,7 @@ public abstract class SQLiteDatabaseClient<T extends Model<T>, H extends SQLiteO
 	 */
 	@Override
 	public void connect(PersistentCallback callback) {
-		addConnectCallback(callback);
+		add(callback);
 		Thread thread = new Thread() {
 			public void run() {
 				try {
@@ -48,7 +50,7 @@ public abstract class SQLiteDatabaseClient<T extends Model<T>, H extends SQLiteO
 	 * @see com.nickaknudson.mva.clients.PersistentClient#addConnectCallback(com.nickaknudson.mva.callbacks.PersistentCallback)
 	 */
 	@Override
-	public boolean addConnectCallback(PersistentCallback callback) {
+	public boolean add(PersistentCallback callback) {
 		return pcallbacks.add(callback);
 	}
 
@@ -56,7 +58,7 @@ public abstract class SQLiteDatabaseClient<T extends Model<T>, H extends SQLiteO
 	 * @see com.nickaknudson.mva.clients.PersistentClient#removeConnectCallback(com.nickaknudson.mva.callbacks.PersistentCallback)
 	 */
 	@Override
-	public boolean removeConnectCallback(PersistentCallback callback) {
+	public boolean remove(PersistentCallback callback) {
 		return pcallbacks.remove(callback);
 	}
 

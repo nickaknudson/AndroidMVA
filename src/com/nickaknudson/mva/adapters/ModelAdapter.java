@@ -4,11 +4,10 @@ import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.nickaknudson.mva.Adapter;
 import com.nickaknudson.mva.Model;
 import com.nickaknudson.mva.Observer;
 
-public abstract class ModelAdapter<T extends Model> extends Adapter {
+public abstract class ModelAdapter<T extends Model<T>> extends Adapter {
 	protected static final String TAG = Adapter.class.getSimpleName();
 
 	private T model;

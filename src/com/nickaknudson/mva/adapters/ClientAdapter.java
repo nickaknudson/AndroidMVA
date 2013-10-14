@@ -4,8 +4,7 @@ import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.nickaknudson.mva.Adapter;
-import com.nickaknudson.mva.Client;
+import com.nickaknudson.mva.clients.Client;
 
 public abstract class ClientAdapter<C extends Client> extends Adapter {
 

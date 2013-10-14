@@ -1,4 +1,4 @@
-package com.nickaknudson.mva.clients;
+package com.nickaknudson.mva.clients.async;
 
 import java.lang.reflect.Type;
 import java.net.URI;
@@ -10,15 +10,16 @@ import com.google.gson.Gson;
 import com.koushikdutta.async.http.AsyncHttpClient;
 import com.koushikdutta.async.http.AsyncHttpRequest;
 import com.koushikdutta.async.http.AsyncHttpResponse;
-import com.koushikdutta.async.http.JSONObjectBody;
+import com.koushikdutta.async.http.body.JSONObjectBody;
 import com.nickaknudson.mva.Model;
-import com.nickaknudson.mva.callbacks.PushCallback;
+import com.nickaknudson.mva.callbacks.SendCallback;
+import com.nickaknudson.mva.clients.SendClient;
 
-public abstract class AndroidAsyncPushClient<T extends Model<T>> implements PushClient<T> {
+public abstract class AndroidAsyncSendClient<T extends Model<T>> implements SendClient<T> {
 	
 	private Gson gson = new Gson();
 
-	protected void push(String url, final T model, final PushCallback<T> callback) {
+	protected void send(String url, final T model, final SendCallback<T> callback) {
 		try {
 			URI uri = URI.create(url);
 			AsyncHttpRequest req = new AsyncHttpRequest(uri, "POST");
@@ -32,14 +33,14 @@ public abstract class AndroidAsyncPushClient<T extends Model<T>> implements Push
 						String json = result.toString();
 						T rmodel = gson.fromJson(json, getType());
 						model.set(rmodel);
-						callback.onPush(model);
+						if(callback != null) callback.onSend(model);
 					} else {
-						callback.onError(e);
+						if(callback != null) callback.onError(e);
 					}
 				}
 			});
 		} catch(JSONException e) {
-			callback.onError(e);
+			if(callback != null) callback.onError(e);
 		}
 	}
 

@@ -3,7 +3,7 @@ package com.nickaknudson.mva.views;
 import android.view.View;
 
 import com.nickaknudson.mva.Model;
-import com.nickaknudson.mva.Client;
+import com.nickaknudson.mva.clients.Client;
 
 public abstract class ModelClientOnClickListener<T extends Model, C extends Client> extends ModelOnClickListener<T> {
 

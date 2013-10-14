@@ -9,6 +9,6 @@ import com.nickaknudson.mva.Model;
  * @author nick
  *
  */
-public interface PushCallback<T extends Model<T>> extends ErrorCallback {
-	public void onPush(T model);
+public interface SendCallback<T extends Model<T>> extends ErrorCallback {
+	public void onSend(T model);
 }

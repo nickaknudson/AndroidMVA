@@ -4,10 +4,10 @@ import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.nickaknudson.mva.Client;
 import com.nickaknudson.mva.Model;
+import com.nickaknudson.mva.clients.Client;
 
-public abstract class ModelClientAdapter<T extends Model, C extends Client> extends ModelAdapter<T> {
+public abstract class ModelClientAdapter<T extends Model<T>, C extends Client> extends ModelAdapter<T> {
 
 	private C client;
 
