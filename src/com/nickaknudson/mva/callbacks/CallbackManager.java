@@ -5,10 +5,19 @@ import java.util.LinkedList;
 
 
 
+/**
+ * @author nick
+ *
+ * @param <C>
+ */
 public class CallbackManager<C extends Callback> {
 	
 	private LinkedList<C> callbacks = new LinkedList<C>();
 	
+	/**
+	 * @param callback
+	 * @return
+	 */
 	public boolean add(C callback) {
 		if(callback != null && !callbacks.contains(callback)) {
 			return callbacks.add(callback);
@@ -17,6 +26,10 @@ public class CallbackManager<C extends Callback> {
 		}
 	}
 	
+	/**
+	 * @param callback
+	 * @return
+	 */
 	public boolean remove(C callback) {
 		return callbacks.remove(callback);
 	}
@@ -35,10 +48,16 @@ public class CallbackManager<C extends Callback> {
 		}
 	}
 	
+	/**
+	 * @return
+	 */
 	public int count() {
 		return callbacks.size();
 	}
 	
+	/**
+	 * 
+	 */
 	public void removeAll() {
 		callbacks.clear();
 	}

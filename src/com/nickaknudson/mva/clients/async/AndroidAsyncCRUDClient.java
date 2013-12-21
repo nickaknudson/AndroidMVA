@@ -19,6 +19,11 @@ import com.nickaknudson.mva.callbacks.ReadCallback;
 import com.nickaknudson.mva.callbacks.UpdateCallback;
 import com.nickaknudson.mva.clients.CRUDClient;
 
+/**
+ * @author nick
+ *
+ * @param <T>
+ */
 public abstract class AndroidAsyncCRUDClient<T extends Model<T>> implements CRUDClient<T> {
 	
 	private Gson gson = new Gson();

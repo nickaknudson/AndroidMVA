@@ -5,17 +5,30 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+/**
+ * @author nick
+ *
+ */
 public abstract class Adapter {
 	protected static final String TAG = Adapter.class.getSimpleName();
 
 	private View view;
 	private Activity activity;
 	
+	/**
+	 * @param activity
+	 * @param root
+	 * @param attachToRoot
+	 */
 	public Adapter(Activity activity, ViewGroup root, boolean attachToRoot) {
 		setActivity(activity);
 		generateViewTS(activity.getLayoutInflater(), root, attachToRoot);
 	}
 	
+	/**
+	 * @param activity
+	 * @param convertView
+	 */
 	public Adapter(Activity activity, View convertView) {
 		setActivity(activity);
 		setView(convertView);
@@ -25,14 +38,23 @@ public abstract class Adapter {
 		return activity;
 	}
 
+	/**
+	 * @return
+	 */
 	public View getView() {
 		return view;
 	}
 	
+	/**
+	 * @param a
+	 */
 	public void setActivity(Activity a) {
 		activity = a;
 	}
 
+	/**
+	 * @param view
+	 */
 	public void setView(View view) {
 		this.view = view;
 		// if the passed a new convertable view, fill it

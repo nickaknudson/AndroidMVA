@@ -14,6 +14,11 @@ import com.nickaknudson.mva.Model;
 import com.nickaknudson.mva.callbacks.IndexCallback;
 import com.nickaknudson.mva.clients.IndexClient;
 
+/**
+ * @author nick
+ *
+ * @param <T>
+ */
 public abstract class AndroidAsyncIndexClient<T extends Model<T>> implements IndexClient<T> {
 	
 	private Gson gson = new Gson();

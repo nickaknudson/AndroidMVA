@@ -13,6 +13,11 @@ import com.nickaknudson.mva.Model;
 import com.nickaknudson.mva.callbacks.FetchCallback;
 import com.nickaknudson.mva.clients.FetchClient;
 
+/**
+ * @author nick
+ *
+ * @param <T>
+ */
 public abstract class AndroidAsyncFetchClient<T extends Model<T>> implements FetchClient<T> {
 	
 	private Gson gson = new Gson();

@@ -15,6 +15,11 @@ import com.nickaknudson.mva.Model;
 import com.nickaknudson.mva.callbacks.SendCallback;
 import com.nickaknudson.mva.clients.SendClient;
 
+/**
+ * @author nick
+ *
+ * @param <T>
+ */
 public abstract class AndroidAsyncSendClient<T extends Model<T>> implements SendClient<T> {
 	
 	private Gson gson = new Gson();

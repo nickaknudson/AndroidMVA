@@ -7,25 +7,47 @@ import android.view.ViewGroup;
 import com.nickaknudson.mva.Model;
 import com.nickaknudson.mva.Observer;
 
+/**
+ * @author nick
+ *
+ * @param <T>
+ */
 public abstract class ModelAdapter<T extends Model<T>> extends Adapter {
 	protected static final String TAG = Adapter.class.getSimpleName();
 
 	private T model;
 	
+	/**
+	 * @param activity
+	 * @param root
+	 * @param attachToRoot
+	 * @param model
+	 */
 	public ModelAdapter(Activity activity, ViewGroup root, boolean attachToRoot, T model) {
 		super(activity, root, attachToRoot);
 		setModel(model);
 	}
 	
+	/**
+	 * @param activity
+	 * @param convertView
+	 * @param model
+	 */
 	public ModelAdapter(Activity activity, View convertView, T model) {
 		super(activity, convertView);
 		setModel(model);
 	}
 
+	/**
+	 * @return
+	 */
 	public T getModel() {
 		return model;
 	}
 	
+	/**
+	 * @param m
+	 */
 	public void setModel(T m) {
 		// remove old reference
 		if(model != null) model.deleteObserver(objectObserver);
