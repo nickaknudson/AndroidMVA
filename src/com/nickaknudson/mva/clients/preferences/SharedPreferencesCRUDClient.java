@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.nickaknudson.mva.clients;
+package com.nickaknudson.mva.clients.preferences;
 
 import java.lang.reflect.Type;
 
@@ -12,6 +12,7 @@ import com.nickaknudson.mva.callbacks.CreateCallback;
 import com.nickaknudson.mva.callbacks.DeleteCallback;
 import com.nickaknudson.mva.callbacks.ReadCallback;
 import com.nickaknudson.mva.callbacks.UpdateCallback;
+import com.nickaknudson.mva.clients.CRUDClient;
 
 /**
  * @author nick
