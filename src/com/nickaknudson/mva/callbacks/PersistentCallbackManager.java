@@ -1,5 +1,9 @@
 package com.nickaknudson.mva.callbacks;
 
+/**
+ * @author nick
+ *
+ */
 public class PersistentCallbackManager extends CallbackManager<PersistentCallback> implements PersistentCallback {
 
 	@Override

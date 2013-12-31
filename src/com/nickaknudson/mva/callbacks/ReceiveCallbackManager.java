@@ -2,6 +2,10 @@ package com.nickaknudson.mva.callbacks;
 
 import com.nickaknudson.mva.Model;
 
+/**
+ * @author nick
+ * @param <T> model type
+ */
 public class ReceiveCallbackManager<T extends Model<T>> extends CallbackManager<ReceiveCallback<T>> implements ReceiveCallback<T> {
 
 	/* (non-Javadoc)

@@ -7,9 +7,16 @@ import com.nickaknudson.mva.Collection;
 import com.nickaknudson.mva.Model;
 
 /**
+ * Asynchronous index operation
+ * 
  * @author nick
+ * @param <T> model type of collection
  *
  */
 public interface IndexCallback<T extends Model<T>> extends ErrorCallback {
-	public void onFetch(Collection<T> collection);
+	/**
+	 * Asynchronous index operation completed
+	 * @param collection
+	 */
+	public void onIndex(Collection<T> collection);
 }

@@ -8,7 +8,7 @@ import java.util.LinkedList;
 /**
  * @author nick
  *
- * @param <C>
+ * @param <C> callback type
  */
 public class CallbackManager<C extends Callback> {
 	
@@ -16,7 +16,7 @@ public class CallbackManager<C extends Callback> {
 	
 	/**
 	 * @param callback
-	 * @return
+	 * @return added
 	 */
 	public boolean add(C callback) {
 		if(callback != null && !callbacks.contains(callback)) {
@@ -28,7 +28,7 @@ public class CallbackManager<C extends Callback> {
 	
 	/**
 	 * @param callback
-	 * @return
+	 * @return removed
 	 */
 	public boolean remove(C callback) {
 		return callbacks.remove(callback);
@@ -49,14 +49,14 @@ public class CallbackManager<C extends Callback> {
 	}
 	
 	/**
-	 * @return
+	 * @return callback count
 	 */
 	public int count() {
 		return callbacks.size();
 	}
 	
 	/**
-	 * 
+	 * removes all callbacks
 	 */
 	public void removeAll() {
 		callbacks.clear();

@@ -16,8 +16,7 @@ import com.nickaknudson.mva.clients.IndexClient;
 
 /**
  * @author nick
- *
- * @param <T>
+ * @param <T> model type for collection
  */
 public abstract class AndroidAsyncIndexClient<T extends Model<T>> implements IndexClient<T> {
 	
@@ -34,7 +33,7 @@ public abstract class AndroidAsyncIndexClient<T extends Model<T>> implements Ind
 					String json = result.toString();
 					Collection<T> rcollection = gson.fromJson(json, getType());
 					collection.addAll(rcollection);
-					callback.onFetch(collection);
+					callback.onIndex(collection);
 				} else {
 					callback.onError(e);
 				}

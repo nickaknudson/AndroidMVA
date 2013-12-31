@@ -2,6 +2,11 @@ package com.nickaknudson.mva.callbacks;
 
 import com.nickaknudson.mva.Model;
 
+/**
+ * @author nick
+ *
+ * @param <T>
+ */
 public class ModelCallbackManager<T extends Model<T>> extends CallbackManager<ModelCallback<T>> implements ModelCallback<T> {
 
 	@Override
