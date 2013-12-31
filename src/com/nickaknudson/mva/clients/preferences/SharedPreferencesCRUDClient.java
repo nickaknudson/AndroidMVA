@@ -16,6 +16,7 @@ import com.nickaknudson.mva.clients.CRUDClient;
 
 /**
  * @author nick
+ * @param <T> 
  *
  */
 public abstract class SharedPreferencesCRUDClient<T extends Model<T>> implements CRUDClient<T> {
@@ -23,6 +24,10 @@ public abstract class SharedPreferencesCRUDClient<T extends Model<T>> implements
 	private Context context;
 	private String settings;
 
+	/**
+	 * @param context
+	 * @param settings
+	 */
 	public SharedPreferencesCRUDClient(Context context, String settings) {
 		this.context = context;
 		this.settings = settings;
@@ -100,9 +105,9 @@ public abstract class SharedPreferencesCRUDClient<T extends Model<T>> implements
 			SharedPreferences.Editor editor = sharedPreferences.edit();
 			editor.clear();
 			editor.commit();
-			callback.onDelete();
+			if(callback != null) callback.onDelete();
 		} catch(Exception e) {
-			callback.onError(e);
+			if(callback != null) callback.onError(e);
 		}
 	}
 
