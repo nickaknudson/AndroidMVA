@@ -11,7 +11,7 @@ public abstract class Model<M extends Model<M>> extends Observable {
 	transient private boolean _new = true;
 
 	/**
-	 * @return
+	 * @return isNew
 	 */
 	public boolean isNew() {
 		return _new;

@@ -18,7 +18,7 @@ public class CallbackManager<C extends Callback> {
 	 * @param callback
 	 * @return added
 	 */
-	public boolean add(C callback) {
+	public synchronized boolean add(C callback) {
 		if(callback != null && !callbacks.contains(callback)) {
 			return callbacks.add(callback);
 		} else {
@@ -30,21 +30,22 @@ public class CallbackManager<C extends Callback> {
 	 * @param callback
 	 * @return removed
 	 */
-	public boolean remove(C callback) {
+	public synchronized boolean remove(C callback) {
 		return callbacks.remove(callback);
 	}
 	
 	protected void each(CallbackManagerCallback<C> callback) {
 		if(callbacks != null && callbacks.size() > 0) {
-			Iterator<C> iter = callbacks.iterator();
-	        while (iter.hasNext()) {
-	        	C cb = iter.next();
-	        	if(cb == null) {
-	        		iter.remove();
-	        	} else {
-		            callback.onCallback(cb);
-	        	}
-	        }
+			// callbacks.removeAll(Collections.singleton(null));
+			Iterator<C> iter = callbacks.iterator(); // TODO synchronize
+			while (iter.hasNext()) {
+				C cb = iter.next();
+				if(cb == null) {
+					iter.remove();
+				} else {
+					callback.onCallback(cb);
+				}
+			}
 		}
 	}
 	
@@ -58,7 +59,7 @@ public class CallbackManager<C extends Callback> {
 	/**
 	 * removes all callbacks
 	 */
-	public void removeAll() {
+	public synchronized void removeAll() {
 		callbacks.clear();
 	}
 }

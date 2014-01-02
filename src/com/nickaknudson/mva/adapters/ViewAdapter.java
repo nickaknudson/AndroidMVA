@@ -6,15 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 /**
- * An adapter defines a logical set of business logic. The primary use case
- * being an intermediary between a {@link com.nickaknudson.mva.Model} and a
- * View. While this is the primary usage, an Adapter does not need to present a
- * UI or 
- * 
  * @author nick
  *
  */
-public abstract class ViewAdapter {
+public abstract class ViewAdapter implements Adapter {
 	protected static final String TAG = ViewAdapter.class.getSimpleName();
 
 	private View view;
@@ -25,9 +20,9 @@ public abstract class ViewAdapter {
 	 * @param root
 	 * @param attachToRoot
 	 */
-	public ViewAdapter(Activity activity, ViewGroup root, boolean attachToRoot) {
+	public ViewAdapter(Activity activity, ViewGroup root) {
 		setActivity(activity);
-		generateViewTS(activity.getLayoutInflater(), root, attachToRoot);
+		generateViewTS(activity.getLayoutInflater(), root);
 	}
 	
 	/**
@@ -44,7 +39,7 @@ public abstract class ViewAdapter {
 	}
 
 	/**
-	 * @return
+	 * @return view
 	 */
 	public View getView() {
 		return view;
@@ -74,27 +69,25 @@ public abstract class ViewAdapter {
 	 * Thread Safe Method - Generate View
 	 * generate a view if we don't have a convertView
 	 */
-	abstract protected View generateView(LayoutInflater layoutInflater, ViewGroup root, boolean attachToRoot);
+	abstract protected View generateView(LayoutInflater layoutInflater, ViewGroup root);
 	
-	protected void generateViewTS(LayoutInflater i, ViewGroup p, boolean a) {
-		activity.runOnUiThread(new GenerateViewRunnable(i, p, a));
+	protected void generateViewTS(LayoutInflater layoutInflater, ViewGroup root) {
+		activity.runOnUiThread(new GenerateViewRunnable(layoutInflater, root));
 	}
 	
 	private class GenerateViewRunnable implements Runnable {
 		
 		private LayoutInflater layoutInflater;
 		private ViewGroup root;
-		private boolean attachToRoot;
 		
-		public GenerateViewRunnable(LayoutInflater i, ViewGroup r, boolean a) {
+		public GenerateViewRunnable(LayoutInflater i, ViewGroup r) {
 			layoutInflater = i;
 			root = r;
-			attachToRoot = a;
 		}
 		
 		@Override
 		public void run() {
-			View v = generateView(layoutInflater, root, attachToRoot);
+			View v = generateView(layoutInflater, root);
 			setView(v);
 		}
 	}

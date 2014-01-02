@@ -6,7 +6,7 @@ package com.nickaknudson.mva.callbacks;
  *
  * @param <C> callback type
  */
-public interface CallbackManagerCallback<C> extends Callback {
+public interface CallbackManagerCallback<C extends Callback> extends Callback {
 	/**
 	 * @param callback
 	 */
