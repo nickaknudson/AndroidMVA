@@ -6,11 +6,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 /**
+ * An adapter defines a logical set of business logic. The primary use case
+ * being an intermediary between a {@link com.nickaknudson.mva.Model} and a
+ * View. While this is the primary usage, an Adapter does not need to present a
+ * UI or 
+ * 
  * @author nick
  *
  */
-public abstract class Adapter {
-	protected static final String TAG = Adapter.class.getSimpleName();
+public abstract class ViewAdapter {
+	protected static final String TAG = ViewAdapter.class.getSimpleName();
 
 	private View view;
 	private Activity activity;
@@ -20,7 +25,7 @@ public abstract class Adapter {
 	 * @param root
 	 * @param attachToRoot
 	 */
-	public Adapter(Activity activity, ViewGroup root, boolean attachToRoot) {
+	public ViewAdapter(Activity activity, ViewGroup root, boolean attachToRoot) {
 		setActivity(activity);
 		generateViewTS(activity.getLayoutInflater(), root, attachToRoot);
 	}
@@ -29,7 +34,7 @@ public abstract class Adapter {
 	 * @param activity
 	 * @param convertView
 	 */
-	public Adapter(Activity activity, View convertView) {
+	public ViewAdapter(Activity activity, View convertView) {
 		setActivity(activity);
 		setView(convertView);
 	}

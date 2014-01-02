@@ -12,8 +12,8 @@ import com.nickaknudson.mva.Observer;
  *
  * @param <T>
  */
-public abstract class ModelAdapter<T extends Model<T>> extends Adapter {
-	protected static final String TAG = Adapter.class.getSimpleName();
+public abstract class ModelAdapter<T extends Model<T>> extends ViewAdapter {
+	protected static final String TAG = ViewAdapter.class.getSimpleName();
 
 	private T model;
 	
@@ -39,7 +39,7 @@ public abstract class ModelAdapter<T extends Model<T>> extends Adapter {
 	}
 
 	/**
-	 * @return
+	 * @return model
 	 */
 	public T getModel() {
 		return model;

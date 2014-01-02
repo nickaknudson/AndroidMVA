@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 
 import com.nickaknudson.mva.clients.Client;
 
-public abstract class ClientAdapter<C extends Client> extends Adapter {
+public abstract class ClientAdapter<C extends Client> extends ViewAdapter {
 
 	private C client;
 
