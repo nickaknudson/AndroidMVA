@@ -20,10 +20,9 @@ public abstract class ModelViewAdapter<T extends Model<T>> extends ViewAdapter i
 	/**
 	 * @param activity
 	 * @param root
-	 * @param attachToRoot
 	 * @param model
 	 */
-	public ModelViewAdapter(Activity activity, ViewGroup root, boolean attachToRoot, T model) {
+	public ModelViewAdapter(Activity activity, ViewGroup root, T model) {
 		super(activity, root);
 		setModel(model);
 	}
