@@ -1,5 +1,6 @@
 package com.nickaknudson.mva.callbacks;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -34,17 +35,17 @@ public class CallbackManager<C extends Callback> {
 		return callbacks.remove(callback);
 	}
 	
+	@SuppressWarnings("unchecked")
 	protected void each(CallbackManagerCallback<C> callback) {
 		if(callbacks != null && callbacks.size() > 0) {
-			// callbacks.removeAll(Collections.singleton(null));
-			Iterator<C> iter = callbacks.iterator(); // TODO synchronize
-			while (iter.hasNext()) {
+			Iterator<C> iter;
+			synchronized(this ) {
+				callbacks.removeAll(Collections.singleton(null));
+				iter = ((LinkedList<C>) callbacks.clone()).iterator();
+			}
+			while (iter != null && iter.hasNext()) {
 				C cb = iter.next();
-				if(cb == null) {
-					iter.remove();
-				} else {
-					callback.onCallback(cb);
-				}
+				callback.onCallback(cb);
 			}
 		}
 	}

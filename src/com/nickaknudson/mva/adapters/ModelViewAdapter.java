@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.nickaknudson.mva.Model;
+import com.nickaknudson.mva.ModelObserver;
 import com.nickaknudson.mva.Observer;
 
 /**
@@ -49,21 +50,21 @@ public abstract class ModelViewAdapter<T extends Model<T>> extends ViewAdapter i
 	 */
 	public void setModel(T m) {
 		// remove old reference
-		if(model != null) model.deleteObserver(objectObserver);
+		if(model != null) model.remove(objectObserver);
 		// add observer and set object
 		model = m;
-		if(model != null) model.addObserver(objectObserver);
+		if(model != null) model.add(objectObserver);
 		refresh();
 	}
 	
-	private Observer<T> objectObserver = new Observer<T>(){
+	private ModelObserver<T> objectObserver = new ModelObserver<T>(){
 		@Override
-		public void update(T object, Object data) {
-			onUpdate((T) object, data);
+		public void onChange(Model<T> model) {
+			onChange(model);
 		}
 	};
 	
-	protected void onUpdate(T model, Object data) {
+	protected void onChange(T model) {
 		refresh();
 	}
 
