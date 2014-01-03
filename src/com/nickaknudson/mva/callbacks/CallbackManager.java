@@ -40,6 +40,18 @@ public class CallbackManager<C extends Callback> {
 		if(callbacks != null && callbacks.size() > 0) {
 			Iterator<C> iter;
 			synchronized(this ) {
+				/* We don't want the Observer doing callbacks into
+				* arbitrary code while holding its own Monitor.
+				* The code where we extract each Observable from
+				* the Vector and store the state of the Observer
+				* needs synchronization, but notifying observers
+				* does not (should not). The worst result of any
+				* potential race-condition here is that:
+				* 1) a newly-added Observer will miss a
+				*   notification in progress
+				* 2) a recently unregistered Observer will be
+				*   wrongly notified when it doesn't care
+				*/
 				callbacks.removeAll(Collections.singleton(null));
 				iter = ((LinkedList<C>) callbacks.clone()).iterator();
 			}
