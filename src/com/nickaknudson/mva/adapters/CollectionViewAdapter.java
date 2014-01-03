@@ -1,9 +1,7 @@
 package com.nickaknudson.mva.adapters;
 
-import java.util.Observable;
-import java.util.Observer;
-
 import com.nickaknudson.mva.Collection;
+import com.nickaknudson.mva.CollectionObserver;
 import com.nickaknudson.mva.Model;
 
 import android.app.Activity;
@@ -40,10 +38,10 @@ public abstract class CollectionViewAdapter<T extends Model<T>> extends BaseAdap
 	
 	public void setCollection(Collection<T> c) {
 		// remove old reference
-		if(collection != null) collection.deleteObserver(collectionObserver);
+		if(collection != null) collection.remove(collectionObserver);
 		// add observer and set list
 		collection = c;
-		if(collection != null) collection.addObserver(collectionObserver);
+		if(collection != null) collection.add(collectionObserver);
 		notifyDataSetChangedTS();
 	}
 	
@@ -81,15 +79,11 @@ public abstract class CollectionViewAdapter<T extends Model<T>> extends BaseAdap
 	 */
 	public abstract View getView(Activity activity, T model, View convertView, ViewGroup root);
 	
-	protected void onUpdate(Collection<T> observable, Object data) {
-		notifyDataSetChangedTS();
-	}
-	
-	private Observer collectionObserver = new Observer(){
+	private CollectionObserver<T> collectionObserver = new CollectionObserver<T>(){
+		
 		@Override
-		@SuppressWarnings("unchecked")
-		public void update(Observable observable, Object data) {
-			onUpdate((Collection<T>) observable, data);
+		public void onChange(Collection<T> collection, Object data) {
+			notifyDataSetChangedTS();
 		}
 	};
 	

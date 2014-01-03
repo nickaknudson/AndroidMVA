@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 
 import com.nickaknudson.mva.Model;
 import com.nickaknudson.mva.ModelObserver;
-import com.nickaknudson.mva.Observer;
 
 /**
  * @author nick
@@ -59,14 +58,10 @@ public abstract class ModelViewAdapter<T extends Model<T>> extends ViewAdapter i
 	
 	private ModelObserver<T> objectObserver = new ModelObserver<T>(){
 		@Override
-		public void onChange(Model<T> model) {
-			onChange(model);
+		public void onChange(Model<T> model, Object data) {
+			refresh();
 		}
 	};
-	
-	protected void onChange(T model) {
-		refresh();
-	}
 
 	@Override
 	protected View fillView(View view) {

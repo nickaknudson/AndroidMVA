@@ -40,7 +40,7 @@ public abstract class Model<M extends Model<M>> {
 	 * reference to this model's instance.
 	 */
 	@SuppressWarnings("unchecked")
-	protected void changed() {
+	protected void changed(Object data) {
 		if(observers != null && observers.size() > 0) {
 			Iterator<ModelObserver<M>> iter;
 			synchronized(this) {
@@ -49,9 +49,13 @@ public abstract class Model<M extends Model<M>> {
 			}
 			while (iter != null && iter.hasNext()) {
 				ModelObserver<M> obs = iter.next();
-				obs.onChange(this);
+				obs.onChange(this, data);
 			}
 		}
+	}
+	
+	protected void changed() {
+		changed(null);
 	}
 	
 	/**
