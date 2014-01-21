@@ -22,16 +22,20 @@ import com.nickaknudson.mva.clients.CRUDClient;
 public abstract class SharedPreferencesCRUDClient<T extends Model<T>> implements CRUDClient<T> {
 	
 	private Context context;
-	private String settings;
 
 	/**
 	 * @param context
 	 * @param settings
 	 */
-	public SharedPreferencesCRUDClient(Context context, String settings) {
+	public SharedPreferencesCRUDClient(Context context) {
 		this.context = context;
-		this.settings = settings;
 	}
+
+    /**
+     * Shared Preferences SETTINGS_NAME
+     * @return SETTINGS_NAME
+     */
+	public abstract String getSettingsName();
 
 	/* (non-Javadoc)
 	 * @see com.nickaknudson.mva.clients.ModelClient#getType()
@@ -46,7 +50,7 @@ public abstract class SharedPreferencesCRUDClient<T extends Model<T>> implements
 	 */
 	@Override
 	public void create(final T model, final CreateCallback<T> callback) {
-		SharedPreferences sharedPreferences = context.getSharedPreferences(settings, Context.MODE_PRIVATE);
+		SharedPreferences sharedPreferences = context.getSharedPreferences(getSettingsName(), Context.MODE_PRIVATE);
 		create(model, sharedPreferences, callback);
 	}
 
@@ -64,7 +68,7 @@ public abstract class SharedPreferencesCRUDClient<T extends Model<T>> implements
 	 */
 	@Override
 	public void read(final T model, final ReadCallback<T> callback) {
-		SharedPreferences sharedPreferences = context.getSharedPreferences(settings, Context.MODE_PRIVATE);
+		SharedPreferences sharedPreferences = context.getSharedPreferences(getSettingsName(), Context.MODE_PRIVATE);
 		read(model, sharedPreferences, callback);
 	}
 
@@ -82,7 +86,7 @@ public abstract class SharedPreferencesCRUDClient<T extends Model<T>> implements
 	 */
 	@Override
 	public void update(T model, UpdateCallback<T> callback) {
-		SharedPreferences sharedPreferences = context.getSharedPreferences(settings, Context.MODE_PRIVATE);
+		SharedPreferences sharedPreferences = context.getSharedPreferences(getSettingsName(), Context.MODE_PRIVATE);
 		update(model, sharedPreferences, callback);
 	}
 
@@ -101,7 +105,7 @@ public abstract class SharedPreferencesCRUDClient<T extends Model<T>> implements
 	@Override
 	public void destroy(final T model, final DeleteCallback callback) {
 		try {
-			SharedPreferences sharedPreferences = context.getSharedPreferences(settings, Context.MODE_PRIVATE);
+			SharedPreferences sharedPreferences = context.getSharedPreferences(getSettingsName(), Context.MODE_PRIVATE);
 			SharedPreferences.Editor editor = sharedPreferences.edit();
 			editor.clear();
 			editor.commit();
