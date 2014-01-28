@@ -58,7 +58,7 @@ public abstract class ModelViewAdapter<T extends Model<T>> extends ViewAdapter i
 	
 	private ModelObserver<T> objectObserver = new ModelObserver<T>(){
 		@Override
-		public void onChange(Model<T> model, Object data) {
+		public void onChange(T model, Object data) {
 			refresh();
 		}
 	};

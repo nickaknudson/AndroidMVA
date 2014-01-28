@@ -7,7 +7,7 @@ import java.util.LinkedList;
 /**
  * @author nick
  *
- * @param <M>
+ * @param <M> model type
  */
 public abstract class Model<M extends Model<M>> {
 	protected static final String TAG = Model.class.getSimpleName();
@@ -61,7 +61,7 @@ public abstract class Model<M extends Model<M>> {
 			}
 			while (iter != null && iter.hasNext()) {
 				ModelObserver<M> obs = iter.next();
-				obs.onChange(this, data);
+				obs.onChange((M) this, data);
 			}
 		}
 	}

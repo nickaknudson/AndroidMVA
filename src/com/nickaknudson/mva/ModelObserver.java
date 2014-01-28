@@ -3,11 +3,12 @@ package com.nickaknudson.mva;
 /**
  * @author nick
  *
- * @param <T>
+ * @param <M> model type
  */
-public interface ModelObserver<T extends Model<T>> {
+public interface ModelObserver<M extends Model<M>> {
 	/**
 	 * @param model
+	 * @param data 
 	 */
-	public void onChange(Model<T> model, Object data);
+	public void onChange(M model, Object data);
 }

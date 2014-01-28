@@ -8,6 +8,7 @@ package com.nickaknudson.mva;
 public interface CollectionObserver<M extends Model<M>> {
 	/**
 	 * @param collection 
+	 * @param data 
 	 */
 	public void onChange(Collection<M> collection, Object data);
 }

@@ -1,5 +1,7 @@
 package com.nickaknudson.mva.adapters;
 
+import java.security.InvalidParameterException;
+
 import com.nickaknudson.mva.Collection;
 import com.nickaknudson.mva.CollectionObserver;
 import com.nickaknudson.mva.Model;
@@ -7,6 +9,10 @@ import com.nickaknudson.mva.Model;
 import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.BaseAdapter;
 
 /**
@@ -19,6 +25,7 @@ public abstract class CollectionViewAdapter<T extends Model<T>> extends BaseAdap
 
 	private Collection<T> collection;
 	private Activity activity;
+	private AdapterView adapterView;
 	
 	/**
 	 * @param activity
@@ -45,6 +52,89 @@ public abstract class CollectionViewAdapter<T extends Model<T>> extends BaseAdap
 		notifyDataSetChangedTS();
 	}
 	
+	/**
+	 * This binds the adapter to an AdapterView
+	 * @param view
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void bindTo(AdapterView view) {
+		if(adapterView != null) {
+			throw new InvalidParameterException("This adapter had already been bound to a view");
+		}
+		adapterView = view;
+		adapterView.setAdapter(this);
+		// set on click listener
+		adapterView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+				T item = getItem(position);
+				onItemClicked(adapterView, view, item, id);
+			}
+		});
+		// set on long click listener
+		adapterView.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+				T item = getItem(position);
+				return onItemLongClicked(adapterView, view, item, id);
+			}
+		});
+		// set on selected listener
+		adapterView.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+				T item = getItem(position);
+				onItemSelect(adapterView, view, item, id);
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> adapterView) {
+				onNothingSelect(adapterView);
+			}
+		});
+	}
+	
+	/**
+	 * @param adapterView 
+	 * @param view
+	 * @param item 
+	 * @param id
+	 */
+	public abstract void onItemClicked(AdapterView<?> adapterView, View view, T item, long id);
+	
+	/**
+	 * @param adapterView 
+	 * @param view
+	 * @param item 
+	 * @param id
+	 * @return true if the callback consumed the long click, false otherwise 
+	 */
+	public abstract boolean onItemLongClicked(AdapterView<?> adapterView, View view, T item, long id);
+	
+	/**
+	 * @param adapterView 
+	 * @param view
+	 * @param item 
+	 * @param id
+	 */
+	public abstract void onItemSelect(AdapterView<?> adapterView, View view, T item, long id);
+	
+	/**
+	 * @param adapterView
+	 */
+	public abstract void onNothingSelect(AdapterView<?> adapterView);
+	
+	/**
+	 * @return adapter view
+	 */
+	@SuppressWarnings("rawtypes")
+	public AdapterView getAdapterView() {
+		return adapterView;
+	}
+	
 	@Override
 	public int getCount() {
 		return collection != null ? collection.size() : 0;
@@ -67,17 +157,28 @@ public abstract class CollectionViewAdapter<T extends Model<T>> extends BaseAdap
 	@Override
 	public View getView(int pos, View cV, ViewGroup r) {
 		T item = getItem(pos);
-		return getView(activity, item, cV, r);
+		if(cV != null) {
+			return getView(activity, cV, item);
+		} else {
+			return getView(activity, r, item);
+		}
 	}
 	
 	/**
 	 * @param activity
-	 * @param model
 	 * @param convertView
-	 * @param root
+	 * @param model
 	 * @return view
 	 */
-	public abstract View getView(Activity activity, T model, View convertView, ViewGroup root);
+	public abstract View getView(Activity activity, View convertView, T model);
+	
+	/**
+	 * @param activity
+	 * @param root
+	 * @param model
+	 * @return view
+	 */
+	public abstract View getView(Activity activity, ViewGroup root, T model);
 	
 	private CollectionObserver<T> collectionObserver = new CollectionObserver<T>(){
 		
