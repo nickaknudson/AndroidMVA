@@ -31,16 +31,15 @@ public abstract class SharedPreferencesCRUDClient<T extends Model<T>> implements
 		this.context = context;
 	}
 
-    /**
-     * Shared Preferences SETTINGS_NAME
-     * @return SETTINGS_NAME
-     */
+	/**
+	 * Shared Preferences SETTINGS_NAME
+	 * @return SETTINGS_NAME
+	 */
 	public abstract String getSettingsName();
 
-	/* (non-Javadoc)
-	 * @see com.nickaknudson.mva.clients.ModelClient#getType()
+	/**
+	 * @return type
 	 */
-	@Override
 	public Type getType() {
 		return getTypeToken().getType();
 	}

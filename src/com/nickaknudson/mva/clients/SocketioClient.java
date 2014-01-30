@@ -23,6 +23,11 @@ import com.nickaknudson.mva.callbacks.ReceiveCallback;
 import com.nickaknudson.mva.callbacks.ReceiveCallbackManager;
 import com.nickaknudson.mva.callbacks.SendCallback;
 
+/**
+ * @author nick
+ *
+ * @param <T>
+ */
 public abstract class SocketioClient<T extends Model<T>> implements SRClient<T>, PersistentClient {
 
 	protected SocketIOClient socketIOClient;
@@ -30,10 +35,17 @@ public abstract class SocketioClient<T extends Model<T>> implements SRClient<T>,
 	private PersistentCallbackManager pcallbacks = new PersistentCallbackManager();
 	private ReceiveCallbackManager<T> rcallbacks = new ReceiveCallbackManager<T>();
 
+	/**
+	 * @return
+	 */
 	public SocketIOClient getSocketIOClient() {
 		return socketIOClient;
 	}
 
+	/**
+	 * @param uri
+	 * @param callback
+	 */
 	public void connect(String uri, final PersistentCallback callback) {
 		add(callback);
         SocketIORequest req = new SocketIORequest(uri);
@@ -91,6 +103,11 @@ public abstract class SocketioClient<T extends Model<T>> implements SRClient<T>,
 		}
 	}
 	
+	/**
+	 * @param name
+	 * @param model
+	 * @param callback
+	 */
 	public void send(String name, final T model, final SendCallback<T> callback) { // TODO name
 		if(socketIOClient != null) {
 			try {
@@ -109,6 +126,10 @@ public abstract class SocketioClient<T extends Model<T>> implements SRClient<T>,
 		}
 	}
 
+	/**
+	 * @param name
+	 * @param callback
+	 */
 	public void receive(String name, final ReceiveCallback<T> callback) { // TODO name
 		add(callback);
 		if(socketIOClient != null) {
@@ -145,8 +166,10 @@ public abstract class SocketioClient<T extends Model<T>> implements SRClient<T>,
 	public boolean remove(ReceiveCallback<T> callback) {
 		return rcallbacks.remove(callback);
 	}
-
-	@Override
+	
+	/**
+	 * @return
+	 */
 	public Type getType() {
 		return getTypeToken().getType();
 	}

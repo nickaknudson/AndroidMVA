@@ -17,7 +17,8 @@ import com.nickaknudson.mva.exceptions.NotConnectedException;
 
 /**
  * @author nick
- *
+ * @param <T> 
+ * @param <H> 
  */
 public abstract class SQLiteDatabaseClient<T extends Model<T>, H extends SQLiteOpenHelper> implements CRUDClient<T>, PersistentClient {
 
@@ -87,15 +88,23 @@ public abstract class SQLiteDatabaseClient<T extends Model<T>, H extends SQLiteO
 		}
 	}
 
+	/**
+	 * @return
+	 */
 	public H getHelper() {
 		return helper;
 	}
 
+	/**
+	 * @param helper
+	 */
 	public void setHelper(H helper) {
 		this.helper = helper;
 	}
 
-	@Override
+	/**
+	 * @return type
+	 */
 	public Type getType() {
 		return getTypeToken().getType();
 	}

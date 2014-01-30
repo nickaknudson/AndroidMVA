@@ -41,7 +41,9 @@ public abstract class AndroidAsyncFetchClient<T extends Model<T>> implements Fet
 		});
 	}
 
-	@Override
+	/**
+	 * @return type
+	 */
 	public Type getType() {
 		return getTypeToken().getType();
 	}

@@ -49,7 +49,9 @@ public abstract class AndroidAsyncSendClient<T extends Model<T>> implements Send
 		}
 	}
 
-	@Override
+	/**
+	 * @return type
+	 */
 	public Type getType() {
 		return getTypeToken().getType();
 	}
