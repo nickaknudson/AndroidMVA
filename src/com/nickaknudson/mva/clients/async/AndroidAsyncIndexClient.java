@@ -31,7 +31,7 @@ public abstract class AndroidAsyncIndexClient<T extends Model<T>> implements Ind
 			public void onCompleted(Exception e, AsyncHttpResponse source, JSONArray result) {
 				if(e == null && result != null) {
 					String json = result.toString();
-					Collection<T> rcollection = gson.fromJson(json, getType());
+					Collection<T> rcollection = gson.fromJson(json, getCollectionType());
 					collection.addAll(rcollection);
 					callback.onIndex(collection);
 				} else {
@@ -42,8 +42,10 @@ public abstract class AndroidAsyncIndexClient<T extends Model<T>> implements Ind
 		});
 	}
 
-	@Override
-	public Type getType() {
-		return getTypeToken().getType();
+	/**
+	 * @return collection type
+	 */
+	public Type getCollectionType() {
+		return getCollectionTypeToken().getType();
 	}
 }
