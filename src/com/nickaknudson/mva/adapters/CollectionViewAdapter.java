@@ -18,20 +18,21 @@ import android.widget.BaseAdapter;
 /**
  * @author nick
  *
- * @param <T> model type of collection
+ * @param <M> model type of collection
  */
-public abstract class CollectionViewAdapter<T extends Model<T>> extends BaseAdapter implements CollectionAdapter<T> {
+public abstract class CollectionViewAdapter<M extends Model<M>> extends BaseAdapter implements CollectionAdapter<M> {
 	protected static final String TAG = CollectionViewAdapter.class.getSimpleName();
 
-	private Collection<T> collection;
+	private Collection<M> collection;
 	private Activity activity;
+	@SuppressWarnings("rawtypes")
 	private AdapterView adapterView;
 	
 	/**
 	 * @param activity
 	 * @param collection
 	 */
-	public CollectionViewAdapter(Activity activity, Collection<T> collection) {
+	public CollectionViewAdapter(Activity activity, Collection<M> collection) {
 		setActivity(activity);
 		setCollection(collection);
 	}
@@ -43,7 +44,7 @@ public abstract class CollectionViewAdapter<T extends Model<T>> extends BaseAdap
 		activity = a;
 	}
 	
-	public void setCollection(Collection<T> c) {
+	public void setCollection(Collection<M> c) {
 		// remove old reference
 		if(collection != null) collection.remove(collectionObserver);
 		// add observer and set list
@@ -68,7 +69,7 @@ public abstract class CollectionViewAdapter<T extends Model<T>> extends BaseAdap
 
 			@Override
 			public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-				T item = getItem(position);
+				M item = getItem(position);
 				onItemClicked(adapterView, view, item, id);
 			}
 		});
@@ -77,7 +78,7 @@ public abstract class CollectionViewAdapter<T extends Model<T>> extends BaseAdap
 
 			@Override
 			public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
-				T item = getItem(position);
+				M item = getItem(position);
 				return onItemLongClicked(adapterView, view, item, id);
 			}
 		});
@@ -86,7 +87,7 @@ public abstract class CollectionViewAdapter<T extends Model<T>> extends BaseAdap
 
 			@Override
 			public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-				T item = getItem(position);
+				M item = getItem(position);
 				onItemSelect(adapterView, view, item, id);
 			}
 
@@ -103,7 +104,7 @@ public abstract class CollectionViewAdapter<T extends Model<T>> extends BaseAdap
 	 * @param item 
 	 * @param id
 	 */
-	public abstract void onItemClicked(AdapterView<?> adapterView, View view, T item, long id);
+	public abstract void onItemClicked(AdapterView<?> adapterView, View view, M item, long id);
 	
 	/**
 	 * @param adapterView 
@@ -112,7 +113,7 @@ public abstract class CollectionViewAdapter<T extends Model<T>> extends BaseAdap
 	 * @param id
 	 * @return true if the callback consumed the long click, false otherwise 
 	 */
-	public abstract boolean onItemLongClicked(AdapterView<?> adapterView, View view, T item, long id);
+	public abstract boolean onItemLongClicked(AdapterView<?> adapterView, View view, M item, long id);
 	
 	/**
 	 * @param adapterView 
@@ -120,7 +121,7 @@ public abstract class CollectionViewAdapter<T extends Model<T>> extends BaseAdap
 	 * @param item 
 	 * @param id
 	 */
-	public abstract void onItemSelect(AdapterView<?> adapterView, View view, T item, long id);
+	public abstract void onItemSelect(AdapterView<?> adapterView, View view, M item, long id);
 	
 	/**
 	 * @param adapterView
@@ -140,12 +141,12 @@ public abstract class CollectionViewAdapter<T extends Model<T>> extends BaseAdap
 		return collection != null ? collection.size() : 0;
 	}
 	
-	public Collection<T> getCollection() {
+	public Collection<M> getCollection() {
 		return collection;
 	}
 
 	@Override
-	public T getItem(int position) {
+	public M getItem(int position) {
 		return collection.get(position);
 	}
 
@@ -156,7 +157,7 @@ public abstract class CollectionViewAdapter<T extends Model<T>> extends BaseAdap
 
 	@Override
 	public View getView(int pos, View cV, ViewGroup r) {
-		T item = getItem(pos);
+		M item = getItem(pos);
 		if(cV != null) {
 			return getView(activity, cV, item);
 		} else {
@@ -170,7 +171,7 @@ public abstract class CollectionViewAdapter<T extends Model<T>> extends BaseAdap
 	 * @param model
 	 * @return view
 	 */
-	public abstract View getView(Activity activity, View convertView, T model);
+	public abstract View getView(Activity activity, View convertView, M model);
 	
 	/**
 	 * @param activity
@@ -178,12 +179,12 @@ public abstract class CollectionViewAdapter<T extends Model<T>> extends BaseAdap
 	 * @param model
 	 * @return view
 	 */
-	public abstract View getView(Activity activity, ViewGroup root, T model);
+	public abstract View getView(Activity activity, ViewGroup root, M model);
 	
-	private CollectionObserver<T> collectionObserver = new CollectionObserver<T>(){
+	private CollectionObserver<M> collectionObserver = new CollectionObserver<M>(){
 		
 		@Override
-		public void onChange(Collection<T> collection, Object data) {
+		public void onChange(Collection<M> collection, Object data) {
 			notifyDataSetChangedTS();
 		}
 	};

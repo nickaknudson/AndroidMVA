@@ -10,13 +10,13 @@ import com.nickaknudson.mva.Model;
  * Asynchronous set operation
  * 
  * @author nick
- * @param <T> model type
+ * @param <M> model type
  *
  */
-public interface SetCallback<T extends Model<T>> extends Callback {
+public interface SetCallback<M extends Model<M>> extends Callback {
 	/**
 	 * Asynchronous set operation completed
 	 * @param model
 	 */
-	public void onSet(T model);
+	public void onSet(M model);
 }

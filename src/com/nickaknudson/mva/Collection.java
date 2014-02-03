@@ -68,7 +68,7 @@ public class Collection<M extends Model<M>> implements java.util.List<M> {
 	 * @param observer
 	 * @return removed
 	 */
-	public synchronized boolean remove(ModelObserver<M> observer) {
+	public synchronized boolean remove(CollectionObserver<M> observer) {
 		return observers.remove(observer);
 	}
 	

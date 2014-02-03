@@ -14,7 +14,7 @@ import com.koushikdutta.async.http.body.JSONObjectBody;
 import com.koushikdutta.async.http.callback.HttpConnectCallback;
 import com.nickaknudson.mva.Model;
 import com.nickaknudson.mva.callbacks.CreateCallback;
-import com.nickaknudson.mva.callbacks.DeleteCallback;
+import com.nickaknudson.mva.callbacks.DestroyCallback;
 import com.nickaknudson.mva.callbacks.ReadCallback;
 import com.nickaknudson.mva.callbacks.UpdateCallback;
 import com.nickaknudson.mva.clients.CRUDClient;
@@ -22,13 +22,13 @@ import com.nickaknudson.mva.clients.CRUDClient;
 /**
  * @author nick
  *
- * @param <T>
+ * @param <M>
  */
-public abstract class AndroidAsyncCRUDClient<T extends Model<T>> implements CRUDClient<T> {
+public abstract class AndroidAsyncCRUDClient<M extends Model<M>> implements CRUDClient<M> {
 	
 	private Gson gson = new Gson();
 
-	protected void create(String url, final T model, final CreateCallback<T> callback) {
+	protected void create(String url, final M model, final CreateCallback<M> callback) {
 		try {
 			URI uri = URI.create(url);
 			AsyncHttpRequest req = new AsyncHttpRequest(uri, "POST");
@@ -39,7 +39,7 @@ public abstract class AndroidAsyncCRUDClient<T extends Model<T>> implements CRUD
 				public void onCompleted(Exception e, AsyncHttpResponse source, JSONObject result) {
 					if(e == null && result != null) {
 						String json = result.toString();
-						T rmodel = gson.fromJson(json, getType());
+						M rmodel = gson.fromJson(json, getType());
 						model.set(rmodel);
 						callback.onCreate(model);
 					} else {
@@ -52,7 +52,7 @@ public abstract class AndroidAsyncCRUDClient<T extends Model<T>> implements CRUD
 		}
 	}
 
-	protected void read(String url, final T model, final ReadCallback<T> callback) {
+	protected void read(String url, final M model, final ReadCallback<M> callback) {
 		URI uri = URI.create(url);
 		AsyncHttpRequest req = new AsyncHttpRequest(uri, "GET");
 		AsyncHttpClient.getDefaultInstance().executeJSONObject(req, new AsyncHttpClient.JSONObjectCallback() {
@@ -60,7 +60,7 @@ public abstract class AndroidAsyncCRUDClient<T extends Model<T>> implements CRUD
 			public void onCompleted(Exception e, AsyncHttpResponse source, JSONObject result) {
 				if(e == null && result != null) {
 					String json = result.toString();
-					T rmodel = gson.fromJson(json, getType());
+					M rmodel = gson.fromJson(json, getType());
 					model.set(rmodel);
 					callback.onRead(model);
 				} else {
@@ -70,7 +70,7 @@ public abstract class AndroidAsyncCRUDClient<T extends Model<T>> implements CRUD
 		});
 	}
 
-	protected void update(String url, final T model, final UpdateCallback<T> callback) {
+	protected void update(String url, final M model, final UpdateCallback<M> callback) {
 		try {
 			URI uri = URI.create(url);
 			AsyncHttpRequest req = new AsyncHttpRequest(uri, "PUT");
@@ -81,7 +81,7 @@ public abstract class AndroidAsyncCRUDClient<T extends Model<T>> implements CRUD
 				public void onCompleted(Exception e, AsyncHttpResponse source, JSONObject result) {
 					if(e == null && result != null) {
 						String json = result.toString();
-						T rmodel = gson.fromJson(json, getType());
+						M rmodel = gson.fromJson(json, getType());
 						model.set(rmodel);
 						callback.onUpdate(model);
 					} else {
@@ -94,7 +94,7 @@ public abstract class AndroidAsyncCRUDClient<T extends Model<T>> implements CRUD
 		}
 	}
 
-	protected void delete(String url, final T model, final DeleteCallback callback) {
+	protected void destroy(String url, final M model, final DestroyCallback<M> callback) {
 		URI uri = URI.create(url);
 		AsyncHttpRequest req = new AsyncHttpRequest(uri, "DELETE");
 		AsyncHttpClient.getDefaultInstance().execute(req, new HttpConnectCallback() {
@@ -102,7 +102,7 @@ public abstract class AndroidAsyncCRUDClient<T extends Model<T>> implements CRUD
 			public void onConnectCompleted(Exception e, AsyncHttpResponse response) {
 				if(e == null) {
 					//model.set(rmodel);
-					callback.onDelete();
+					callback.onDestroy(model);
 				} else {
 					callback.onError(e);
 				}

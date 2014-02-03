@@ -8,15 +8,15 @@ import com.nickaknudson.mva.Model;
  * the primary interface with which to manipulate a model and receive
  * lifecylce callbacks related to that model.
  * @author nick
- * @param <T> model type
+ * @param <M> model type
  */
-public interface ModelAdapter<T extends Model<T>> {
+public interface ModelAdapter<M extends Model<M>> {
 	/**
 	 * @return model
 	 */
-	public T getModel();
+	public M getModel();
 	/**
 	 * @param model
 	 */
-	public void setModel(T model);
+	public void setModel(M model);
 }

@@ -5,11 +5,19 @@ import com.nickaknudson.mva.Model;
 import android.view.View;
 import android.view.View.OnClickListener;
 
-public abstract class ModelOnClickListener<T extends Model> implements OnClickListener {
+/**
+ * @author nick
+ *
+ * @param <M>
+ */
+public abstract class ModelOnClickListener<M extends Model<M>> implements OnClickListener {
 
-	private T model;
+	private M model;
 
-	public ModelOnClickListener(T model) {
+	/**
+	 * @param model
+	 */
+	public ModelOnClickListener(M model) {
 		this.model = model;
 	}
 	
@@ -18,5 +26,9 @@ public abstract class ModelOnClickListener<T extends Model> implements OnClickLi
 		onClick(v, model);
 	}
 	
-	public abstract void onClick(View v, T model);
+	/**
+	 * @param v
+	 * @param model
+	 */
+	public abstract void onClick(View v, M model);
 }

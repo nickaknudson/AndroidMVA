@@ -9,15 +9,15 @@ import com.nickaknudson.mva.Model;
  * the primary interface with which to manipulate models within a collection
  * and receive lifecylce callbacks related to those models.
  * @author nick
- * @param <T> model type of collection
+ * @param <M> model type of collection
  */
-public interface CollectionAdapter<T extends Model<T>> {
+public interface CollectionAdapter<M extends Model<M>> {
 	/**
 	 * @return collection
 	 */
-	public Collection<T> getCollection();
+	public Collection<M> getCollection();
 	/**
 	 * @param collection
 	 */
-	public void setCollection(Collection<T> collection);
+	public void setCollection(Collection<M> collection);
 }

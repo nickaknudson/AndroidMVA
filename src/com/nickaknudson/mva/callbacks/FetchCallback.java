@@ -9,13 +9,13 @@ import com.nickaknudson.mva.Model;
  * Asynchronous fetch operation
  * 
  * @author nick
- * @param <T> model type
+ * @param <M> model type
  *
  */
-public interface FetchCallback<T extends Model<T>> extends ErrorCallback {
+public interface FetchCallback<M extends Model<M>> extends ErrorCallback {
 	/**
 	 * Asynchronous fetch operation completed
 	 * @param model
 	 */
-	public void onFetch(T model);
+	public void onFetch(M model);
 }

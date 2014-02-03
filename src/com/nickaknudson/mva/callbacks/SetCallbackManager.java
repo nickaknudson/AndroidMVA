@@ -4,16 +4,16 @@ import com.nickaknudson.mva.Model;
 
 /**
  * @author nick
- * @param <T> model type
+ * @param <M> model type
  */
-public class SetCallbackManager<T extends Model<T>> extends CallbackManager<SetCallback<T>> implements SetCallback<T> {
+public class SetCallbackManager<M extends Model<M>> extends CallbackManager<SetCallback<M>> implements SetCallback<M> {
 
 	@Override
-	public void onSet(final T model) {
-		each(new CallbackManagerCallback<SetCallback<T>>() {
+	public void onSet(final M model) {
+		each(new CallbackManagerCallback<SetCallback<M>>() {
 
 			@Override
-			public void onCallback(SetCallback<T> callback) {
+			public void onCallback(SetCallback<M> callback) {
 				callback.onSet(model);
 			}
 			

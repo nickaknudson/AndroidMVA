@@ -7,12 +7,12 @@ import com.nickaknudson.mva.callbacks.IndexCallback;
 /**
  * @author nick
  *
- * @param <T>
+ * @param <M>
  */
-public interface IndexClient<T extends Model<T>> extends CollectionClient<T> {
+public interface IndexClient<M extends Model<M>> extends CollectionClient<M> {
 	/**
 	 * @param collection
 	 * @param callback
 	 */
-	public void index(Collection<T> collection, IndexCallback<T> callback);
+	public void index(Collection<M> collection, IndexCallback<M> callback);
 }

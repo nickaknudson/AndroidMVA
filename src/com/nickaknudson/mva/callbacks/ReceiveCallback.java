@@ -9,13 +9,13 @@ import com.nickaknudson.mva.Model;
  * Asynchronous receive operation
  * 
  * @author nick
- * @param <T> model type
+ * @param <M> model type
  *
  */
-public interface ReceiveCallback<T extends Model<T>> extends Callback {
+public interface ReceiveCallback<M extends Model<M>> extends Callback {
 	/**
 	 * Asynchronous receive operation completed
 	 * @param model
 	 */
-	public void onReceive(T model);
+	public void onReceive(M model);
 }

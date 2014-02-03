@@ -16,13 +16,13 @@ import com.nickaknudson.mva.clients.FetchClient;
 /**
  * @author nick
  *
- * @param <T>
+ * @param <M>
  */
-public abstract class AndroidAsyncFetchClient<T extends Model<T>> implements FetchClient<T> {
+public abstract class AndroidAsyncFetchClient<M extends Model<M>> implements FetchClient<M> {
 	
 	private Gson gson = new Gson();
 
-	protected void fetch(String url, final T model, final FetchCallback<T> callback) {
+	protected void fetch(String url, final M model, final FetchCallback<M> callback) {
 		URI uri = URI.create(url);
 		AsyncHttpRequest req = new AsyncHttpRequest(uri, "GET");
 		AsyncHttpClient.getDefaultInstance().executeJSONObject(req, new AsyncHttpClient.JSONObjectCallback() {
@@ -31,7 +31,7 @@ public abstract class AndroidAsyncFetchClient<T extends Model<T>> implements Fet
 			public void onCompleted(Exception e, AsyncHttpResponse source, JSONObject result) {
 				if(e == null && result != null) {
 					String json = result.toString();
-					T rmodel = gson.fromJson(json, getType());
+					M rmodel = gson.fromJson(json, getType());
 					model.set(rmodel);
 					callback.onFetch(model);
 				} else {

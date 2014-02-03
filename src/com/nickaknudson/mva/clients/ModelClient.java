@@ -8,12 +8,12 @@ import com.nickaknudson.mva.Model;
 
 /**
  * @author nick
- * @param <T> 
+ * @param <M> 
  *
  */
-public interface ModelClient<T extends Model<T>> extends Client {
+public interface ModelClient<M extends Model<M>> extends Client {
 	/**
 	 * @return type token
 	 */
-	abstract TypeToken<T> getTypeToken();
+	abstract TypeToken<M> getTypeToken();
 }

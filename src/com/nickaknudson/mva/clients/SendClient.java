@@ -6,12 +6,12 @@ import com.nickaknudson.mva.callbacks.SendCallback;
 /**
  * @author nick
  *
- * @param <T>
+ * @param <M>
  */
-public interface SendClient<T extends Model<T>> extends ModelClient<T> {
+public interface SendClient<M extends Model<M>> extends ModelClient<M> {
 	/**
 	 * @param model
 	 * @param callback
 	 */
-	public void send(T model, SendCallback<T> callback);
+	public void send(M model, SendCallback<M> callback);
 }

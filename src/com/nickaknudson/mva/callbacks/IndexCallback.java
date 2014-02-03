@@ -10,13 +10,13 @@ import com.nickaknudson.mva.Model;
  * Asynchronous index operation
  * 
  * @author nick
- * @param <T> model type of collection
+ * @param <M> model type of collection
  *
  */
-public interface IndexCallback<T extends Model<T>> extends ErrorCallback {
+public interface IndexCallback<M extends Model<M>> extends ErrorCallback {
 	/**
 	 * Asynchronous index operation completed
 	 * @param collection
 	 */
-	public void onIndex(Collection<T> collection);
+	public void onIndex(Collection<M> collection);
 }

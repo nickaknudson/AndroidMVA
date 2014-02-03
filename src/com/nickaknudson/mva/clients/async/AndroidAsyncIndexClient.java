@@ -16,13 +16,13 @@ import com.nickaknudson.mva.clients.IndexClient;
 
 /**
  * @author nick
- * @param <T> model type for collection
+ * @param <M> model type for collection
  */
-public abstract class AndroidAsyncIndexClient<T extends Model<T>> implements IndexClient<T> {
+public abstract class AndroidAsyncIndexClient<M extends Model<M>> implements IndexClient<M> {
 	
 	private Gson gson = new Gson();
 
-	protected void index(String url, final Collection<T> collection, final IndexCallback<T> callback) {
+	protected void index(String url, final Collection<M> collection, final IndexCallback<M> callback) {
 		URI uri = URI.create(url);
 		AsyncHttpRequest req = new AsyncHttpRequest(uri, "GET");
 		AsyncHttpClient.getDefaultInstance().executeJSONArray(req, new AsyncHttpClient.JSONArrayCallback() {
@@ -31,7 +31,7 @@ public abstract class AndroidAsyncIndexClient<T extends Model<T>> implements Ind
 			public void onCompleted(Exception e, AsyncHttpResponse source, JSONArray result) {
 				if(e == null && result != null) {
 					String json = result.toString();
-					Collection<T> rcollection = gson.fromJson(json, getCollectionType());
+					Collection<M> rcollection = gson.fromJson(json, getCollectionType());
 					collection.addAll(rcollection);
 					callback.onIndex(collection);
 				} else {

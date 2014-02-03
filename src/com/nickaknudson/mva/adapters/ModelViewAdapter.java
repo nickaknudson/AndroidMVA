@@ -10,19 +10,19 @@ import com.nickaknudson.mva.ModelObserver;
 /**
  * @author nick
  *
- * @param <T>
+ * @param <M>
  */
-public abstract class ModelViewAdapter<T extends Model<T>> extends ViewAdapter implements ModelAdapter<T> {
+public abstract class ModelViewAdapter<M extends Model<M>> extends ViewAdapter implements ModelAdapter<M> {
 	protected static final String TAG = ModelViewAdapter.class.getSimpleName();
 
-	private T model;
+	private M model;
 	
 	/**
 	 * @param activity
 	 * @param root
 	 * @param model
 	 */
-	public ModelViewAdapter(Activity activity, ViewGroup root, T model) {
+	public ModelViewAdapter(Activity activity, ViewGroup root, M model) {
 		super(activity, root);
 		setModel(model);
 	}
@@ -32,7 +32,7 @@ public abstract class ModelViewAdapter<T extends Model<T>> extends ViewAdapter i
 	 * @param convertView
 	 * @param model
 	 */
-	public ModelViewAdapter(Activity activity, View convertView, T model) {
+	public ModelViewAdapter(Activity activity, View convertView, M model) {
 		super(activity, convertView);
 		setModel(model);
 	}
@@ -40,14 +40,14 @@ public abstract class ModelViewAdapter<T extends Model<T>> extends ViewAdapter i
 	/**
 	 * @return model
 	 */
-	public T getModel() {
+	public M getModel() {
 		return model;
 	}
 	
 	/**
 	 * @param m
 	 */
-	public void setModel(T m) {
+	public void setModel(M m) {
 		// remove old reference
 		if(model != null) model.remove(objectObserver);
 		// add observer and set object
@@ -56,9 +56,9 @@ public abstract class ModelViewAdapter<T extends Model<T>> extends ViewAdapter i
 		refresh();
 	}
 	
-	private ModelObserver<T> objectObserver = new ModelObserver<T>(){
+	private ModelObserver<M> objectObserver = new ModelObserver<M>(){
 		@Override
-		public void onChange(T model, Object data) {
+		public void onChange(M model, Object data) {
 			refresh();
 		}
 	};
@@ -68,5 +68,5 @@ public abstract class ModelViewAdapter<T extends Model<T>> extends ViewAdapter i
 		return fillView(view, model);
 	}
 	
-	abstract protected View fillView(View view, T model);
+	abstract protected View fillView(View view, M model);
 }

@@ -15,10 +15,10 @@ import android.content.SharedPreferences.Editor;
 
 /**
  * @author nick
- * @param <T> 
+ * @param <M> 
  *
  */
-public abstract class SimpleSharedPreferencesCRUDClient<T extends Model<T>> extends SharedPreferencesCRUDClient<T> {
+public abstract class SimpleSharedPreferencesCRUDClient<M extends Model<M>> extends SharedPreferencesCRUDClient<M> {
 
 	/** JSON column */
 	private static final String JSON = "JSON";
@@ -36,7 +36,7 @@ public abstract class SimpleSharedPreferencesCRUDClient<T extends Model<T>> exte
 	 * @see com.nickaknudson.mva.clients.preferences.SharedPreferencesCRUDClient#create(com.nickaknudson.mva.Model, android.content.SharedPreferences, com.nickaknudson.mva.callbacks.CreateCallback)
 	 */
 	@Override
-	protected void create(T model, SharedPreferences sharedPreferences, CreateCallback<T> callback) {
+	protected void create(M model, SharedPreferences sharedPreferences, CreateCallback<M> callback) {
 		try {
 			Editor editor = sharedPreferences.edit();
 			String json = gson.toJson(model, getType());
@@ -52,13 +52,13 @@ public abstract class SimpleSharedPreferencesCRUDClient<T extends Model<T>> exte
 	 * @see com.nickaknudson.mva.clients.preferences.SharedPreferencesCRUDClient#read(com.nickaknudson.mva.Model, android.content.SharedPreferences, com.nickaknudson.mva.callbacks.ReadCallback)
 	 */
 	@Override
-	protected void read(T model, SharedPreferences sharedPreferences, ReadCallback<T> callback) {
+	protected void read(M model, SharedPreferences sharedPreferences, ReadCallback<M> callback) {
 		try {
 			String json = sharedPreferences.getString(JSON, null);
 			if(json == null) {
 				json = "{}";
 			}
-			T rmodel = gson.fromJson(json, getType());
+			M rmodel = gson.fromJson(json, getType());
 			model.set(rmodel);
 			if(callback != null) callback.onRead(model);
 		} catch(Exception e) {
@@ -70,7 +70,7 @@ public abstract class SimpleSharedPreferencesCRUDClient<T extends Model<T>> exte
 	 * @see com.nickaknudson.mva.clients.preferences.SharedPreferencesCRUDClient#update(com.nickaknudson.mva.Model, android.content.SharedPreferences, com.nickaknudson.mva.callbacks.UpdateCallback)
 	 */
 	@Override
-	protected void update(T model, SharedPreferences sharedPreferences, UpdateCallback<T> callback) {
+	protected void update(M model, SharedPreferences sharedPreferences, UpdateCallback<M> callback) {
 		try {
 			Editor editor = sharedPreferences.edit();
 			String json = gson.toJson(model, getType());

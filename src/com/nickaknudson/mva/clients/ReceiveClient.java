@@ -8,10 +8,22 @@ import com.nickaknudson.mva.callbacks.ReceiveCallback;
 
 /**
  * @author nick
+ * @param <M> 
  *
  */
-public interface ReceiveClient<T extends Model<T>> extends ModelClient<T> {
-	public abstract void receive(final ReceiveCallback<T> callback);
-	public abstract boolean add(ReceiveCallback<T> callback);
-	public abstract boolean remove(ReceiveCallback<T> callback);
+public interface ReceiveClient<M extends Model<M>> extends ModelClient<M> {
+	/**
+	 * @param callback
+	 */
+	public abstract void receive(final ReceiveCallback<M> callback);
+	/**
+	 * @param callback
+	 * @return
+	 */
+	public abstract boolean add(ReceiveCallback<M> callback);
+	/**
+	 * @param callback
+	 * @return
+	 */
+	public abstract boolean remove(ReceiveCallback<M> callback);
 }

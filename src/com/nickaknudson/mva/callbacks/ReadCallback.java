@@ -9,13 +9,13 @@ import com.nickaknudson.mva.Model;
  * Asynchronous read operation
  * 
  * @author nick
- * @param <T> model type
+ * @param <M> model type
  *
  */
-public interface ReadCallback<T extends Model<T>> extends ErrorCallback {
+public interface ReadCallback<M extends Model<M>> extends ErrorCallback {
 	/**
 	 * Asynchronous read operation completed
 	 * @param model
 	 */
-	public void onRead(T model);
+	public void onRead(M model);
 }

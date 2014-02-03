@@ -14,9 +14,10 @@ import android.view.ViewGroup;
 
 /**
  * @author nick
+ * @param <M> 
  *
  */
-public class ModelFragment<T extends Model<T>> extends Fragment {
+public class ModelFragment<M extends Model<M>> extends Fragment {
 
 	@Override
 	public void onAttach(Activity activity) {

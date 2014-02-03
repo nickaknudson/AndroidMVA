@@ -18,13 +18,13 @@ import com.nickaknudson.mva.clients.SendClient;
 /**
  * @author nick
  *
- * @param <T>
+ * @param <M>
  */
-public abstract class AndroidAsyncSendClient<T extends Model<T>> implements SendClient<T> {
+public abstract class AndroidAsyncSendClient<M extends Model<M>> implements SendClient<M> {
 	
 	private Gson gson = new Gson();
 
-	protected void send(String url, final T model, final SendCallback<T> callback) {
+	protected void send(String url, final M model, final SendCallback<M> callback) {
 		try {
 			URI uri = URI.create(url);
 			AsyncHttpRequest req = new AsyncHttpRequest(uri, "POST");
@@ -36,7 +36,7 @@ public abstract class AndroidAsyncSendClient<T extends Model<T>> implements Send
 				public void onCompleted(Exception e, AsyncHttpResponse source, JSONObject result) {
 					if(e == null && result != null) {
 						String json = result.toString();
-						T rmodel = gson.fromJson(json, getType());
+						M rmodel = gson.fromJson(json, getType());
 						model.set(rmodel);
 						if(callback != null) callback.onSend(model);
 					} else {

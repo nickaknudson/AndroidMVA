@@ -9,13 +9,13 @@ import com.nickaknudson.mva.Model;
  * Asynchronous update operation
  * 
  * @author nick
- * @param <T> model type
+ * @param <M> model type
  *
  */
-public interface UpdateCallback<T extends Model<T>> extends ErrorCallback {
+public interface UpdateCallback<M extends Model<M>> extends ErrorCallback {
 	/**
 	 * Asynchronous update operation completed
 	 * @param model
 	 */
-	public void onUpdate(T model);
+	public void onUpdate(M model);
 }

@@ -4,19 +4,19 @@ import com.nickaknudson.mva.Model;
 
 /**
  * @author nick
- * @param <T> model type
+ * @param <M> model type
  */
-public class ReceiveCallbackManager<T extends Model<T>> extends CallbackManager<ReceiveCallback<T>> implements ReceiveCallback<T> {
+public class ReceiveCallbackManager<M extends Model<M>> extends CallbackManager<ReceiveCallback<M>> implements ReceiveCallback<M> {
 
 	/* (non-Javadoc)
 	 * @see com.nickaknudson.mva.callback.RecieveCallback#onReceive(com.nickaknudson.mva.Model)
 	 */
 	@Override
-	public void onReceive(final T model) {
-		each(new CallbackManagerCallback<ReceiveCallback<T>>() {
+	public void onReceive(final M model) {
+		each(new CallbackManagerCallback<ReceiveCallback<M>>() {
 
 			@Override
-			public void onCallback(ReceiveCallback<T> callback) {
+			public void onCallback(ReceiveCallback<M> callback) {
 				callback.onReceive(model);
 			}
 		});

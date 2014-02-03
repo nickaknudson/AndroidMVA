@@ -1,4 +1,4 @@
-package com.nickaknudson.mva.clients;
+package com.nickaknudson.mva.clients.socket;
 
 import java.lang.reflect.Type;
 
@@ -22,18 +22,20 @@ import com.nickaknudson.mva.callbacks.PersistentCallbackManager;
 import com.nickaknudson.mva.callbacks.ReceiveCallback;
 import com.nickaknudson.mva.callbacks.ReceiveCallbackManager;
 import com.nickaknudson.mva.callbacks.SendCallback;
+import com.nickaknudson.mva.clients.PersistentClient;
+import com.nickaknudson.mva.clients.SRClient;
 
 /**
  * @author nick
  *
- * @param <T>
+ * @param <M>
  */
-public abstract class SocketioClient<T extends Model<T>> implements SRClient<T>, PersistentClient {
+public abstract class SocketioClient<M extends Model<M>> implements SRClient<M>, PersistentClient {
 
 	protected SocketIOClient socketIOClient;
 	private Gson gson = new Gson();
 	private PersistentCallbackManager pcallbacks = new PersistentCallbackManager();
-	private ReceiveCallbackManager<T> rcallbacks = new ReceiveCallbackManager<T>();
+	private ReceiveCallbackManager<M> rcallbacks = new ReceiveCallbackManager<M>();
 
 	/**
 	 * @return
@@ -108,7 +110,7 @@ public abstract class SocketioClient<T extends Model<T>> implements SRClient<T>,
 	 * @param model
 	 * @param callback
 	 */
-	public void send(String name, final T model, final SendCallback<T> callback) { // TODO name
+	public void send(String name, final M model, final SendCallback<M> callback) { // TODO name
 		if(socketIOClient != null) {
 			try {
 				String json = gson.toJson(model, getType());
@@ -130,7 +132,7 @@ public abstract class SocketioClient<T extends Model<T>> implements SRClient<T>,
 	 * @param name
 	 * @param callback
 	 */
-	public void receive(String name, final ReceiveCallback<T> callback) { // TODO name
+	public void receive(String name, final ReceiveCallback<M> callback) { // TODO name
 		add(callback);
 		if(socketIOClient != null) {
 			socketIOClient.on(name, new EventCallback() {
@@ -141,7 +143,7 @@ public abstract class SocketioClient<T extends Model<T>> implements SRClient<T>,
 						if(argument != null && argument.length() >= 1) {
 							JSONObject obj = argument.getJSONObject(0);
 							String json = obj.toString();
-							T model = gson.fromJson(json, getType());
+							M model = gson.fromJson(json, getType());
 							rcallbacks.onReceive(model);
 						}
 					} catch (JSONException e) {
@@ -158,12 +160,12 @@ public abstract class SocketioClient<T extends Model<T>> implements SRClient<T>,
 	}
 	
 	@Override
-	public boolean add(ReceiveCallback<T> callback) {
+	public boolean add(ReceiveCallback<M> callback) {
 		return rcallbacks.add(callback);
 	}
 	
 	@Override
-	public boolean remove(ReceiveCallback<T> callback) {
+	public boolean remove(ReceiveCallback<M> callback) {
 		return rcallbacks.remove(callback);
 	}
 	

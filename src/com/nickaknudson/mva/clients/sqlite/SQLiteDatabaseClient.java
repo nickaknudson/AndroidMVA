@@ -17,10 +17,10 @@ import com.nickaknudson.mva.exceptions.NotConnectedException;
 
 /**
  * @author nick
- * @param <T> 
+ * @param <M> 
  * @param <H> 
  */
-public abstract class SQLiteDatabaseClient<T extends Model<T>, H extends SQLiteOpenHelper> implements CRUDClient<T>, PersistentClient {
+public abstract class SQLiteDatabaseClient<M extends Model<M>, H extends SQLiteOpenHelper> implements CRUDClient<M>, PersistentClient {
 
 	private PersistentCallbackManager pcallbacks = new PersistentCallbackManager();
 	private H helper;

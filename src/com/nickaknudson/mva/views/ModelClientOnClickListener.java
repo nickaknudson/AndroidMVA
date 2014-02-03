@@ -5,19 +5,34 @@ import android.view.View;
 import com.nickaknudson.mva.Model;
 import com.nickaknudson.mva.clients.Client;
 
-public abstract class ModelClientOnClickListener<T extends Model, C extends Client> extends ModelOnClickListener<T> {
+/**
+ * @author nick
+ *
+ * @param <M>
+ * @param <C>
+ */
+public abstract class ModelClientOnClickListener<M extends Model<M>, C extends Client> extends ModelOnClickListener<M> {
 
 	private C client;
 
-	public ModelClientOnClickListener(T model, C client) {
+	/**
+	 * @param model
+	 * @param client
+	 */
+	public ModelClientOnClickListener(M model, C client) {
 		super(model);
 		this.client = client;
 	}
 
 	@Override
-	public void onClick(View v, T model) {
+	public void onClick(View v, M model) {
 		onClick(v, model, client);
 	}
 	
-	public abstract void onClick(View v, T model, C client);
+	/**
+	 * @param v
+	 * @param model
+	 * @param client
+	 */
+	public abstract void onClick(View v, M model, C client);
 }
