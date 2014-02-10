@@ -61,7 +61,10 @@ public abstract class ViewAdapter implements Adapter {
 		refresh();
 	}
 	
-	protected void refresh() {
+	/**
+	 * Refresh the view be calling it's {@link #fillView} method
+	 */
+	public void refresh() {
 		fillViewTS();
 	}
 	

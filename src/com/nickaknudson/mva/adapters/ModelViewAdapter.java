@@ -53,7 +53,8 @@ public abstract class ModelViewAdapter<M extends Model<M>> extends ViewAdapter i
 		// add observer and set object
 		model = m;
 		if(model != null) model.add(objectObserver);
-		refresh();
+		// TODO don't want this on the first load, but will want it later
+		//refresh();
 	}
 	
 	private ModelObserver<M> objectObserver = new ModelObserver<M>(){
