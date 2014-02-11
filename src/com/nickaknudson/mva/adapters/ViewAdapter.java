@@ -57,12 +57,12 @@ public abstract class ViewAdapter implements Adapter {
 	 */
 	public void setView(View view) {
 		this.view = view;
-		// if the passed a new convertable view, fill it
+		// if passed a new convertable view, fill it
 		refresh();
 	}
 	
 	/**
-	 * Refresh the view be calling it's {@link #fillView} method
+	 * Refresh the view by calling it's {@link #fillView} method
 	 */
 	public void refresh() {
 		fillViewTS();
@@ -74,8 +74,13 @@ public abstract class ViewAdapter implements Adapter {
 	 */
 	abstract protected View generateView(LayoutInflater layoutInflater, ViewGroup root);
 	
-	protected void generateViewTS(LayoutInflater layoutInflater, ViewGroup root) {
-		activity.runOnUiThread(new GenerateViewRunnable(layoutInflater, root));
+	protected void generateViewTS(final LayoutInflater layoutInflater, final ViewGroup root) {
+		//Thread thread = new Thread() {
+		//	public void run() {
+				activity.runOnUiThread(new GenerateViewRunnable(layoutInflater, root));
+		//	}
+		//};
+		//thread.start();
 	}
 	
 	private class GenerateViewRunnable implements Runnable {
@@ -108,7 +113,12 @@ public abstract class ViewAdapter implements Adapter {
 	abstract protected View fillView(View view);
 	
 	private void fillViewTS() {
-		activity.runOnUiThread(new FillViewRunnable());
+		Thread thread = new Thread() {
+			public void run() {
+				activity.runOnUiThread(new FillViewRunnable());
+			}
+		};
+		thread.start();
 	}
 	
 	protected class FillViewRunnable implements Runnable {
