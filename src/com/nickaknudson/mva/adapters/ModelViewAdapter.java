@@ -45,6 +45,7 @@ public abstract class ModelViewAdapter<M extends Model<M>> extends ViewAdapter i
 	}
 	
 	/**
+	 * Call {@link #refresh} on this adapter after setting a new model
 	 * @param m
 	 */
 	public void setModel(M m) {
@@ -53,16 +54,21 @@ public abstract class ModelViewAdapter<M extends Model<M>> extends ViewAdapter i
 		// add observer and set object
 		model = m;
 		if(model != null) model.add(objectObserver);
-		// TODO don't want this on the first load, but will want it later
-		//refresh();
 	}
 	
 	private ModelObserver<M> objectObserver = new ModelObserver<M>(){
 		@Override
 		public void onChange(M model, Object data) {
 			refresh();
+			onModelChange(model, data);
 		}
 	};
+
+	/**
+	 * @param model
+	 * @param data
+	 */
+	protected abstract void onModelChange(M model, Object data);
 
 	@Override
 	protected View fillView(View view) {

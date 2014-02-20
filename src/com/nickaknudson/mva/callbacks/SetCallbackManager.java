@@ -11,12 +11,10 @@ public class SetCallbackManager<M extends Model<M>> extends CallbackManager<SetC
 	@Override
 	public void onSet(final M model) {
 		each(new CallbackManagerCallback<SetCallback<M>>() {
-
 			@Override
 			public void onCallback(SetCallback<M> callback) {
 				callback.onSet(model);
 			}
-			
 		});
 	}
 }

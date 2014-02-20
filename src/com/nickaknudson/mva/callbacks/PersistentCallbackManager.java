@@ -9,7 +9,6 @@ public class PersistentCallbackManager extends CallbackManager<PersistentCallbac
 	@Override
 	public void onConnected() {
 		each(new CallbackManagerCallback<PersistentCallback>() {
-
 			@Override
 			public void onCallback(PersistentCallback callback) {
 				callback.onConnected();
@@ -20,7 +19,6 @@ public class PersistentCallbackManager extends CallbackManager<PersistentCallbac
 	@Override
 	public void onDisconnected() {
 		each(new CallbackManagerCallback<PersistentCallback>() {
-
 			@Override
 			public void onCallback(PersistentCallback callback) {
 				callback.onDisconnected();
@@ -28,13 +26,9 @@ public class PersistentCallbackManager extends CallbackManager<PersistentCallbac
 		});
 	}
 
-	/* (non-Javadoc)
-	 * @see com.nickaknudson.mva.callbacks.ErrorCallback#onError(java.lang.Exception)
-	 */
 	@Override
 	public void onError(final Exception e) {
 		each(new CallbackManagerCallback<PersistentCallback>() {
-
 			@Override
 			public void onCallback(PersistentCallback callback) {
 				callback.onError(e);

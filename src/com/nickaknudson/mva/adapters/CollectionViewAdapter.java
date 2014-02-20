@@ -43,15 +43,27 @@ public abstract class CollectionViewAdapter<M extends Model<M>> extends BaseAdap
 	public void setActivity(Activity a) {
 		activity = a;
 	}
+
 	
+	/**
+	 * Call {@link #refresh} on this adapter after setting a new collection
+	 * @param c
+	 */
 	public void setCollection(Collection<M> c) {
 		// remove old reference
 		if(collection != null) collection.remove(collectionObserver);
 		// add observer and set list
 		collection = c;
 		if(collection != null) collection.add(collectionObserver);
-		notifyDataSetChangedTS();
 	}
+	
+	private CollectionObserver<M> collectionObserver = new CollectionObserver<M>(){
+		
+		@Override
+		public void onChange(Collection<M> collection, Object data) {
+			notifyDataSetChangedTS();
+		}
+	};
 	
 	/**
 	 * This binds the adapter to an AdapterView
@@ -59,6 +71,8 @@ public abstract class CollectionViewAdapter<M extends Model<M>> extends BaseAdap
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void bindTo(AdapterView view) {
+		// TODO perhaps have this adapter create it's adapter view and auto bind
+		// just like view adapter generates it's own view
 		if(adapterView != null) {
 			throw new InvalidParameterException("This adapter had already been bound to a view");
 		}
@@ -66,7 +80,6 @@ public abstract class CollectionViewAdapter<M extends Model<M>> extends BaseAdap
 		adapterView.setAdapter(this);
 		// set on click listener
 		adapterView.setOnItemClickListener(new OnItemClickListener() {
-
 			@Override
 			public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 				M item = getItem(position);
@@ -75,7 +88,6 @@ public abstract class CollectionViewAdapter<M extends Model<M>> extends BaseAdap
 		});
 		// set on long click listener
 		adapterView.setOnItemLongClickListener(new OnItemLongClickListener() {
-
 			@Override
 			public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
 				M item = getItem(position);
@@ -84,13 +96,11 @@ public abstract class CollectionViewAdapter<M extends Model<M>> extends BaseAdap
 		});
 		// set on selected listener
 		adapterView.setOnItemSelectedListener(new OnItemSelectedListener() {
-
 			@Override
 			public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
 				M item = getItem(position);
 				onItemSelect(adapterView, view, item, id);
 			}
-
 			@Override
 			public void onNothingSelected(AdapterView<?> adapterView) {
 				onNothingSelect(adapterView);
@@ -181,15 +191,14 @@ public abstract class CollectionViewAdapter<M extends Model<M>> extends BaseAdap
 	 */
 	public abstract View getView(Activity activity, ViewGroup root, M model);
 	
-	private CollectionObserver<M> collectionObserver = new CollectionObserver<M>(){
-		
-		@Override
-		public void onChange(Collection<M> collection, Object data) {
-			notifyDataSetChangedTS();
-		}
-	};
+	/**
+	 * Refresh the view by calling it's {@link #fillView} method
+	 */
+	public void refresh() {
+		notifyDataSetChangedTS();
+	}
 	
-	/*
+	/**
 	 * Thread Safe Method - NotifyDataSetChanged
 	 */
 	protected void notifyDataSetChangedTS() {

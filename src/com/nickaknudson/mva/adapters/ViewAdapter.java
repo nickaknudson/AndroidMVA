@@ -1,5 +1,8 @@
 package com.nickaknudson.mva.adapters;
 
+import com.nickaknudson.mva.callbacks.ViewCallback;
+import com.nickaknudson.mva.callbacks.ViewCallbackManager;
+
 import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +17,8 @@ public abstract class ViewAdapter implements Adapter {
 
 	private View view;
 	private Activity activity;
+	private ViewCallbackManager gcallbacks = new ViewCallbackManager();
+	private ViewCallbackManager fcallbacks = new ViewCallbackManager();
 	
 	/**
 	 * @param activity
@@ -68,19 +73,14 @@ public abstract class ViewAdapter implements Adapter {
 		fillViewTS();
 	}
 	
-	/*
+	/**
 	 * Thread Safe Method - Generate View
 	 * generate a view if we don't have a convertView
 	 */
 	abstract protected View generateView(LayoutInflater layoutInflater, ViewGroup root);
 	
 	protected void generateViewTS(final LayoutInflater layoutInflater, final ViewGroup root) {
-		//Thread thread = new Thread() {
-		//	public void run() {
-				activity.runOnUiThread(new GenerateViewRunnable(layoutInflater, root));
-		//	}
-		//};
-		//thread.start();
+		activity.runOnUiThread(new GenerateViewRunnable(layoutInflater, root));
 	}
 	
 	private class GenerateViewRunnable implements Runnable {
@@ -97,10 +97,31 @@ public abstract class ViewAdapter implements Adapter {
 		public void run() {
 			View v = generateView(layoutInflater, root);
 			setView(v);
+			gcallbacks.onView(v);
 		}
 	}
+	
+	/**
+	 * Alerts observers that the view has been generated
+	 * @param replay
+	 * @param callback
+	 * @return added
+	 */
+	public boolean onGenerateView(boolean replay, ViewCallback callback) {
+		return gcallbacks.add(replay, callback);
+	}
+	
+	/**
+	 * Alerts observers that the view has been generated
+	 * @param replay
+	 * @param callback
+	 * @return added
+	 */
+	public boolean onGenerateViewOnce(boolean replay, ViewCallback callback) {
+		return gcallbacks.once(replay, callback);
+	}
 
-	/*
+	/**
 	 * Thread Safe Method - Fill View
 	 * here is where we do everything important
 	 */
@@ -126,7 +147,28 @@ public abstract class ViewAdapter implements Adapter {
 		@Override
 		public void run() {
 			fillView();
+			fcallbacks.onView(view);
 		}
+	}
+	
+	/**
+	 * Alerts observers that the view has been filled
+	 * @param replay
+	 * @param callback
+	 * @return added
+	 */
+	public boolean onFillView(boolean replay, ViewCallback callback) {
+		return fcallbacks.add(replay, callback);
+	}
+	
+	/**
+	 * Alerts observers that the view has been filled
+	 * @param replay
+	 * @param callback
+	 * @return added
+	 */
+	public boolean onFillViewOnce(boolean replay, ViewCallback callback) {
+		return fcallbacks.once(replay, callback);
 	}
 }
 

@@ -50,17 +50,17 @@ public abstract class SocketioClient<M extends Model<M>> implements SRClient<M>,
 	 */
 	public void connect(String uri, final PersistentCallback callback) {
 		add(callback);
-        SocketIORequest req = new SocketIORequest(uri);
-        req.setLogging("Socket.IO", Log.VERBOSE);
-        SocketIOClient.connect(AsyncHttpClient.getDefaultInstance(), req, new ConnectCallback() {
-        	
-    		@Override
-    		public void onConnectCompleted(Exception ex, SocketIOClient client) {
-    			if(ex != null) {
-    				pcallbacks.onError(ex);
-    			} else {
-	    			socketIOClient = client;
-	    			socketIOClient.setDisconnectCallback(new DisconnectCallback() {
+		SocketIORequest req = new SocketIORequest(uri);
+		req.setLogging("Socket.IO", Log.VERBOSE);
+		SocketIOClient.connect(AsyncHttpClient.getDefaultInstance(), req, new ConnectCallback() {
+
+			@Override
+			public void onConnectCompleted(Exception ex, SocketIOClient client) {
+				if(ex != null) {
+					pcallbacks.onError(ex);
+				} else {
+					socketIOClient = client;
+					socketIOClient.setDisconnectCallback(new DisconnectCallback() {
 	
 						@Override
 						public void onDisconnect(Exception e) {
@@ -70,11 +70,11 @@ public abstract class SocketioClient<M extends Model<M>> implements SRClient<M>,
 								pcallbacks.onDisconnected();
 							}
 						}
-	    			});
-	    			pcallbacks.onConnected();
-    			}
-    		}
-        });
+					});
+					pcallbacks.onConnected();
+				}
+			}
+		});
 	}
 	
 	@Override
