@@ -15,6 +15,8 @@ public abstract class Model<M extends Model<M>> {
 	transient private boolean _new = true;
 	transient private LinkedList<ModelObserver<M>> observers = new LinkedList<ModelObserver<M>>();
 
+	//private HashMap<String, Property<?>> _properties;
+
 	/**
 	 * @return isNew
 	 */
@@ -25,7 +27,7 @@ public abstract class Model<M extends Model<M>> {
 	protected void setNew(boolean n) {
 		_new = n;
 	}
-
+	
 	/**
 	 * Clients can call this to do a mass attribute update. Your implementation
 	 * determines under what circumstances attributes get updated. Remember to
@@ -34,6 +36,25 @@ public abstract class Model<M extends Model<M>> {
 	 * @param model
 	 */
 	public abstract void set(M model);
+	/* *
+	public void set(M model) {
+		HashMap<String, Property<?>> properties = getProperties();
+		Iterator<Property<?>> iter = properties.values().iterator();
+		while(iter.hasNext()) {
+			try {
+				Property<?> property = iter.next();
+				String name = property.getName();
+				// get property from model
+				// set to property
+				model.get(name, new MergeProperty(property) {
+					@Override
+					public void onSet() {}
+				});
+			} catch (NoSuchFieldException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
 	/**
 	 * Alerts observers that the model has changed. Provides observers a
@@ -96,4 +117,57 @@ public abstract class Model<M extends Model<M>> {
 	public synchronized void removeAll() {
 		observers.clear();
 	}
+	
+	/**
+	 * @return
+	 *
+	public HashMap<String, Property<?>> getProperties() {
+		if(_properties == null) {
+			Property<?>[] props = properties();
+			_properties = new HashMap<String, Property<?>>();
+			if(props != null) {
+				for(Property<?> prop : props) {
+					_properties.put(prop.getName(), prop);
+				}
+			}
+		}
+		return _properties;
+	}
+	
+	/**
+	 * @param properties 
+	 * @return
+	 *
+	public abstract Property<?>[] properties();
+	
+	/**
+	 * @param prop
+	 * @param getter 
+	 * @throws NoSuchFieldException 
+	 *
+	public void get(String prop, GetProperty getter) throws NoSuchFieldException {
+		if(getter == null) throw new InvalidParameterException("getter required");
+		Property<?> property = getProperties().get(prop);
+		if(property != null) {
+			property.get(getter);
+		} else {
+			throw new NoSuchFieldException(prop);
+		}
+	}
+	
+	/**
+	 * @param prop
+	 * @param setter 
+	 * @throws NoSuchFieldException setter
+	 *
+	public void set(String prop, SetProperty setter) throws NoSuchFieldException {
+		if(setter == null) throw new InvalidParameterException("getter required");
+		Property<?> property = getProperties().get(prop);
+		if(property != null) {
+			property.set(setter);
+		} else {
+			throw new NoSuchFieldException(prop);
+		}
+	}
+	/* */
 }
