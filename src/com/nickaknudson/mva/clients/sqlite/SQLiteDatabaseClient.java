@@ -89,7 +89,7 @@ public abstract class SQLiteDatabaseClient<M extends Model<M>, H extends SQLiteO
 	}
 
 	/**
-	 * @return
+	 * @return helper
 	 */
 	public H getHelper() {
 		return helper;

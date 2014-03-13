@@ -17,13 +17,15 @@ public interface ReceiveClient<M extends Model<M>> extends ModelClient<M> {
 	 */
 	public abstract void receive(final ReceiveCallback<M> callback);
 	/**
+	 * Add a callback to the client
 	 * @param callback
-	 * @return
+	 * @return if the callback was successfully added
 	 */
 	public abstract boolean add(ReceiveCallback<M> callback);
 	/**
+	 * Remove a callback from the client
 	 * @param callback
-	 * @return
+	 * @return if the callback was successfully removed
 	 */
 	public abstract boolean remove(ReceiveCallback<M> callback);
 }

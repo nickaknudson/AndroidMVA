@@ -12,7 +12,7 @@ import com.nickaknudson.mva.Model;
  * @param <M> model type
  *
  */
-public interface ReceiveCallback<M extends Model<M>> extends Callback {
+public interface ReceiveCallback<M extends Model<M>> extends ManagedCallback {
 	/**
 	 * Asynchronous receive operation completed
 	 * @param model

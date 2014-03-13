@@ -13,9 +13,9 @@ public class ViewCallbackManager extends CallbackManager<ViewCallback> implement
 
 	@Override
 	public void onView(final View view) {
-		each(new CallbackManagerCallback<ViewCallback>() {
+		each(new CallbackManagerTrigger<ViewCallback>() {
 			@Override
-			public void onCallback(ViewCallback callback) {
+			public void triggerCallback(ViewCallback callback) {
 				callback.onView(view);
 			}
 		});

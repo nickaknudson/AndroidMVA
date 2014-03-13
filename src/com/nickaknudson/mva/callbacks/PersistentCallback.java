@@ -4,7 +4,7 @@ package com.nickaknudson.mva.callbacks;
  * @author nick
  *
  */
-public interface PersistentCallback extends ErrorCallback {
+public interface PersistentCallback extends ErrorCallback, ManagedCallback {
 	/**
 	 * Asynchronous connection operation completed
 	 */

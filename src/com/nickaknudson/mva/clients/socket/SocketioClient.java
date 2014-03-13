@@ -38,7 +38,7 @@ public abstract class SocketioClient<M extends Model<M>> implements SRClient<M>,
 	private ReceiveCallbackManager<M> rcallbacks = new ReceiveCallbackManager<M>();
 
 	/**
-	 * @return
+	 * @return the underlying socket.io client
 	 */
 	public SocketIOClient getSocketIOClient() {
 		return socketIOClient;
@@ -170,7 +170,7 @@ public abstract class SocketioClient<M extends Model<M>> implements SRClient<M>,
 	}
 	
 	/**
-	 * @return
+	 * @return type
 	 */
 	public Type getType() {
 		return getTypeToken().getType();

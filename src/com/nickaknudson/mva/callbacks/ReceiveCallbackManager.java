@@ -10,9 +10,9 @@ public class ReceiveCallbackManager<M extends Model<M>> extends CallbackManager<
 	
 	@Override
 	public void onReceive(final M model) {
-		each(new CallbackManagerCallback<ReceiveCallback<M>>() {
+		each(new CallbackManagerTrigger<ReceiveCallback<M>>() {
 			@Override
-			public void onCallback(ReceiveCallback<M> callback) {
+			public void triggerCallback(ReceiveCallback<M> callback) {
 				callback.onReceive(model);
 			}
 		});

@@ -13,7 +13,7 @@ import com.nickaknudson.mva.Model;
  * @param <M> model type
  *
  */
-public interface SetCallback<M extends Model<M>> extends Callback {
+public interface SetCallback<M extends Model<M>> extends ManagedCallback {
 	/**
 	 * Asynchronous set operation completed
 	 * @param model

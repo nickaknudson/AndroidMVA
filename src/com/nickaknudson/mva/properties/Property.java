@@ -12,7 +12,7 @@ public abstract class Property<T> {
 	private T object;
 	
 	/**
-	 * @return
+	 * @return object
 	 */
 	public T get() {
 		if(object != null) {

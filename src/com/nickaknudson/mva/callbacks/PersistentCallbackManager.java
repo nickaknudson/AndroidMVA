@@ -8,9 +8,9 @@ public class PersistentCallbackManager extends CallbackManager<PersistentCallbac
 
 	@Override
 	public void onConnected() {
-		each(new CallbackManagerCallback<PersistentCallback>() {
+		each(new CallbackManagerTrigger<PersistentCallback>() {
 			@Override
-			public void onCallback(PersistentCallback callback) {
+			public void triggerCallback(PersistentCallback callback) {
 				callback.onConnected();
 			}
 		});
@@ -18,9 +18,9 @@ public class PersistentCallbackManager extends CallbackManager<PersistentCallbac
 
 	@Override
 	public void onDisconnected() {
-		each(new CallbackManagerCallback<PersistentCallback>() {
+		each(new CallbackManagerTrigger<PersistentCallback>() {
 			@Override
-			public void onCallback(PersistentCallback callback) {
+			public void triggerCallback(PersistentCallback callback) {
 				callback.onDisconnected();
 			}
 		});
@@ -28,9 +28,9 @@ public class PersistentCallbackManager extends CallbackManager<PersistentCallbac
 
 	@Override
 	public void onError(final Exception e) {
-		each(new CallbackManagerCallback<PersistentCallback>() {
+		each(new CallbackManagerTrigger<PersistentCallback>() {
 			@Override
-			public void onCallback(PersistentCallback callback) {
+			public void triggerCallback(PersistentCallback callback) {
 				callback.onError(e);
 			}
 		});

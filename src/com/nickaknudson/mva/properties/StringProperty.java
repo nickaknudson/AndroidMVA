@@ -5,7 +5,6 @@ package com.nickaknudson.mva.properties;
 
 /**
  * @author nick
- * @param <M> 
  *
  */
 public class StringProperty extends Property<String> {

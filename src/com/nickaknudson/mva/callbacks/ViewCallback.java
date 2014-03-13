@@ -8,7 +8,7 @@ import android.view.View;
 /**
  * @author nick
  */
-public interface ViewCallback extends Callback {
+public interface ViewCallback extends ManagedCallback {
 	/**
 	 * @param view
 	 */

@@ -107,18 +107,8 @@ public abstract class ViewAdapter implements Adapter {
 	 * @param callback
 	 * @return added
 	 */
-	public boolean onGenerateView(boolean replay, ViewCallback callback) {
-		return gcallbacks.add(replay, callback);
-	}
-	
-	/**
-	 * Alerts observers that the view has been generated
-	 * @param replay
-	 * @param callback
-	 * @return added
-	 */
-	public boolean onGenerateViewOnce(boolean replay, ViewCallback callback) {
-		return gcallbacks.once(replay, callback);
+	public boolean onGenerateView(ViewCallback callback) {
+		return gcallbacks.add(callback);
 	}
 
 	/**
@@ -157,18 +147,8 @@ public abstract class ViewAdapter implements Adapter {
 	 * @param callback
 	 * @return added
 	 */
-	public boolean onFillView(boolean replay, ViewCallback callback) {
-		return fcallbacks.add(replay, callback);
-	}
-	
-	/**
-	 * Alerts observers that the view has been filled
-	 * @param replay
-	 * @param callback
-	 * @return added
-	 */
-	public boolean onFillViewOnce(boolean replay, ViewCallback callback) {
-		return fcallbacks.once(replay, callback);
+	public boolean onFillView(ViewCallback callback) {
+		return fcallbacks.add(callback);
 	}
 }
 

@@ -6,9 +6,9 @@ package com.nickaknudson.mva.callbacks;
  *
  * @param <C> callback type
  */
-public interface CallbackManagerCallback<C extends Callback> extends Callback {
+public interface CallbackManagerTrigger<C extends Callback> {
 	/**
 	 * @param callback
 	 */
-	public void onCallback(C callback);
+	public void triggerCallback(C callback);
 }
