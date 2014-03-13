@@ -55,15 +55,14 @@ public abstract class Model<M extends Model<M>> {
 			}
 		}
 	}
+	*/
 
 	/**
 	 * Alerts observers that the model has changed. Provides observers a
 	 * reference to this model's instance.
 	 */
-	@SuppressWarnings("unchecked")
 	protected void changed(Object data) {
 		if(observers != null && observers.size() > 0) {
-			Iterator<ModelObserver<M>> iter;
 			synchronized(this) {
 				/* We don't want the Observer doing callbacks into
 				* arbitrary code while holding its own Monitor.
@@ -78,11 +77,9 @@ public abstract class Model<M extends Model<M>> {
 				*   wrongly notified when it doesn't care
 				*/
 				observers.removeAll(Collections.singleton(null));
-				iter = ((LinkedList<ModelObserver<M>>) observers.clone()).iterator();
-			}
-			while (iter != null && iter.hasNext()) {
-				ModelObserver<M> obs = iter.next();
-				obs.onChange((M) this, data);
+				for(ModelObserver<M> observer : observers) {
+					observer.onChange((M)this, data);
+				}
 			}
 		}
 	}

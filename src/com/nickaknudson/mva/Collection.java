@@ -21,10 +21,8 @@ public class Collection<M extends Model<M>> implements java.util.List<M> {
 	 * Alerts observers that the model has changed. Provides observers a
 	 * reference to this model's instance.
 	 */
-	@SuppressWarnings("unchecked")
 	protected void changed(Object data) {
 		if(observers != null && observers.size() > 0) {
-			Iterator<CollectionObserver<M>> iter;
 			synchronized(this) {
 				/* We don't want the Observer doing callbacks into
 				* arbitrary code while holding its own Monitor.
@@ -39,11 +37,9 @@ public class Collection<M extends Model<M>> implements java.util.List<M> {
 				*   wrongly notified when it doesn't care
 				*/
 				observers.removeAll(Collections.singleton(null));
-				iter = ((LinkedList<CollectionObserver<M>>) observers.clone()).iterator();
-			}
-			while (iter != null && iter.hasNext()) {
-				CollectionObserver<M> obs = iter.next();
-				obs.onChange(this, data);
+				for(CollectionObserver<M> observer : observers) {
+					observer.onChange(this, data);
+				}
 			}
 		}
 	}
