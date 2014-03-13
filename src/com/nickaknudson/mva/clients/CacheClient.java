@@ -8,7 +8,6 @@ import com.nickaknudson.mva.callbacks.CacheCallback;
  */
 public interface CacheClient extends Client {
 	/**
-	 * @param model
 	 * @param callback
 	 */
 	public abstract void cache(final CacheCallback callback);
