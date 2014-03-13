@@ -3,19 +3,17 @@
  */
 package com.nickaknudson.mva.callbacks;
 
-import com.nickaknudson.mva.Model;
-
 /**
  * Asynchronous fetch operation
  * 
  * @author nick
- * @param <M> model type
+ * @param <T> object type
  *
  */
-public interface FetchCallback<M extends Model<M>> extends ErrorCallback {
+public interface FetchCallback<T> extends ErrorCallback {
 	/**
 	 * Asynchronous fetch operation completed
-	 * @param model
+	 * @param object
 	 */
-	public void onFetch(M model);
+	public void onFetch(T object);
 }
