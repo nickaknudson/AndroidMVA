@@ -4,13 +4,15 @@ import java.io.File;
 
 import com.koushikdutta.async.http.AsyncHttpClient;
 import com.koushikdutta.async.http.AsyncHttpResponse;
+import com.nickaknudson.mva.Model;
 import com.nickaknudson.mva.callbacks.CacheCallback;
 import com.nickaknudson.mva.clients.CacheClient;
 
 /**
  * @author nick
+ * @param <M> model type
  */
-public abstract class AsyncCacheClient implements CacheClient {
+public abstract class AsyncCacheClient<M extends Model<M>> implements CacheClient<M> {
 
 	/**
 	 * @param url
@@ -29,4 +31,6 @@ public abstract class AsyncCacheClient implements CacheClient {
 			}
 		});
 	}
+	
+	// TODO implement cache
 }
