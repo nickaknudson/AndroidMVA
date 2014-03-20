@@ -1,18 +1,15 @@
 package com.nickaknudson.mva.adapters;
 
-import java.security.InvalidParameterException;
-
 import com.nickaknudson.mva.Collection;
 import com.nickaknudson.mva.CollectionObserver;
 import com.nickaknudson.mva.Model;
+import com.nickaknudson.mva.callbacks.ViewCallback;
+import com.nickaknudson.mva.callbacks.ViewCallbackManager;
 
 import android.app.Activity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.BaseAdapter;
 
 /**
@@ -23,18 +20,43 @@ import android.widget.BaseAdapter;
 public abstract class CollectionViewAdapter<M extends Model<M>> extends BaseAdapter implements CollectionAdapter<M> {
 	protected static final String TAG = CollectionViewAdapter.class.getSimpleName();
 
-	private Collection<M> collection;
+	private View view;
 	private Activity activity;
-	@SuppressWarnings("rawtypes")
-	private AdapterView adapterView;
+	private Collection<M> collection;
+	private ViewCallbackManager gcallbacks = new ViewCallbackManager();
+	private ViewCallbackManager fcallbacks = new ViewCallbackManager();
 	
 	/**
 	 * @param activity
+	 * @param root
 	 * @param collection
 	 */
-	public CollectionViewAdapter(Activity activity, Collection<M> collection) {
+	public CollectionViewAdapter(Activity activity, ViewGroup root, Collection<M> collection) {
 		setActivity(activity);
+		generateViewTS(activity.getLayoutInflater(), root);
 		setCollection(collection);
+	}
+	
+	/**
+	 * @param activity
+	 * @param convertView
+	 * @param collection
+	 */
+	public CollectionViewAdapter(Activity activity, View convertView, Collection<M> collection) {
+		setActivity(activity);
+		setView(convertView);
+		setCollection(collection);
+	}
+	
+	protected Activity getActivity() {
+		return activity;
+	}
+
+	/**
+	 * @return view
+	 */
+	public View getView() {
+		return view;
 	}
 	
 	/**
@@ -44,6 +66,92 @@ public abstract class CollectionViewAdapter<M extends Model<M>> extends BaseAdap
 		activity = a;
 	}
 
+	/**
+	 * @param view
+	 */
+	public void setView(View view) {
+		this.view = view;
+		// if passed a new convertable view, fill it
+		fillViewTS();
+	}
+	
+	/**
+	 * Thread Safe Method - Generate View
+	 * generate a view if we don't have a convertView
+	 */
+	abstract protected View generateView(LayoutInflater layoutInflater, ViewGroup root);
+	
+	protected void generateViewTS(final LayoutInflater layoutInflater, final ViewGroup root) {
+		activity.runOnUiThread(new GenerateViewRunnable(layoutInflater, root));
+	}
+	
+	private class GenerateViewRunnable implements Runnable {
+		
+		private LayoutInflater layoutInflater;
+		private ViewGroup root;
+		
+		public GenerateViewRunnable(LayoutInflater i, ViewGroup r) {
+			layoutInflater = i;
+			root = r;
+		}
+		
+		@Override
+		public void run() {
+			View v = generateView(layoutInflater, root);
+			setView(v);
+			gcallbacks.onView(v);
+		}
+	}
+	
+	/**
+	 * Alerts observers that the view has been generated
+	 * @param replay
+	 * @param callback
+	 * @return added
+	 */
+	public boolean onGenerateView(ViewCallback callback) {
+		return gcallbacks.add(callback);
+	}
+
+	/**
+	 * Thread Safe Method - Fill View
+	 * here is where we do everything important
+	 */
+	protected View fillView() {
+		synchronized(view) {
+			return fillView(view);
+		}
+	}
+	
+	abstract protected View fillView(View view);
+	
+	private void fillViewTS() {
+		Thread thread = new Thread() {
+			public void run() {
+				activity.runOnUiThread(new FillViewRunnable());
+			}
+		};
+		thread.start();
+	}
+	
+	protected class FillViewRunnable implements Runnable {
+		
+		@Override
+		public void run() {
+			fillView();
+			fcallbacks.onView(view);
+		}
+	}
+	
+	/**
+	 * Alerts observers that the view has been filled
+	 * @param replay
+	 * @param callback
+	 * @return added
+	 */
+	public boolean onFillView(ViewCallback callback) {
+		return fcallbacks.add(callback);
+	}
 	
 	/**
 	 * Call {@link #refresh} on this adapter after setting a new collection
@@ -61,96 +169,18 @@ public abstract class CollectionViewAdapter<M extends Model<M>> extends BaseAdap
 		
 		@Override
 		public void onChange(Collection<M> collection, Object data) {
+			onCollectionChange(collection, data);
 			notifyDataSetChangedTS();
 		}
 	};
 	
-	/**
-	 * This binds the adapter to an AdapterView
-	 * @param view
-	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void bindTo(AdapterView view) {
-		// TODO perhaps have this adapter create it's adapter view and auto bind
-		// just like view adapter generates it's own view
-		if(adapterView != null) {
-			throw new InvalidParameterException("This adapter had already been bound to a view");
-		}
-		adapterView = view;
-		adapterView.setAdapter(this);
-		// set on click listener
-		adapterView.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-				M item = getItem(position);
-				onItemClicked(adapterView, view, item, id);
-			}
-		});
-		// set on long click listener
-		adapterView.setOnItemLongClickListener(new OnItemLongClickListener() {
-			@Override
-			public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
-				M item = getItem(position);
-				return onItemLongClicked(adapterView, view, item, id);
-			}
-		});
-		// set on selected listener
-		adapterView.setOnItemSelectedListener(new OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-				M item = getItem(position);
-				onItemSelect(adapterView, view, item, id);
-			}
-			@Override
-			public void onNothingSelected(AdapterView<?> adapterView) {
-				onNothingSelect(adapterView);
-			}
-		});
-	}
-	
-	/**
-	 * @param adapterView 
-	 * @param view
-	 * @param item 
-	 * @param id
-	 */
-	public abstract void onItemClicked(AdapterView<?> adapterView, View view, M item, long id);
-	
-	/**
-	 * @param adapterView 
-	 * @param view
-	 * @param item 
-	 * @param id
-	 * @return true if the callback consumed the long click, false otherwise 
-	 */
-	public abstract boolean onItemLongClicked(AdapterView<?> adapterView, View view, M item, long id);
-	
-	/**
-	 * @param adapterView 
-	 * @param view
-	 * @param item 
-	 * @param id
-	 */
-	public abstract void onItemSelect(AdapterView<?> adapterView, View view, M item, long id);
-	
-	/**
-	 * @param adapterView
-	 */
-	public abstract void onNothingSelect(AdapterView<?> adapterView);
-	
-	/**
-	 * @return adapter view
-	 */
-	@SuppressWarnings("rawtypes")
-	public AdapterView getAdapterView() {
-		return adapterView;
-	}
+	protected abstract void onCollectionChange(Collection<M> collection, Object data);
 	
 	@Override
 	public int getCount() {
 		return collection != null ? collection.size() : 0;
 	}
-	
+
 	public Collection<M> getCollection() {
 		return collection;
 	}
@@ -213,7 +243,7 @@ public abstract class CollectionViewAdapter<M extends Model<M>> extends BaseAdap
 		}
 	}
 
-	/*
+	/**
 	 * Thread Safe Method - NotifyDataSetInvalidated
 	 */
 	protected void notifyDataSetInvalidatedTS() {

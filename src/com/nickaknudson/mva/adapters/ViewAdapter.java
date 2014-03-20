@@ -23,7 +23,6 @@ public abstract class ViewAdapter implements Adapter {
 	/**
 	 * @param activity
 	 * @param root
-	 * @param attachToRoot
 	 */
 	public ViewAdapter(Activity activity, ViewGroup root) {
 		setActivity(activity);
@@ -63,7 +62,7 @@ public abstract class ViewAdapter implements Adapter {
 	public void setView(View view) {
 		this.view = view;
 		// if passed a new convertable view, fill it
-		refresh();
+		fillViewTS();
 	}
 	
 	/**
