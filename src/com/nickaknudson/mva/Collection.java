@@ -49,6 +49,14 @@ public class Collection<M extends Model<M>> implements java.util.List<M> {
 	}
 	
 	/**
+	 * @param c
+	 */
+	public void set(Collection<M> c) {
+		collection.clear();
+		addAll(c);
+	}
+	
+	/**
 	 * @param observer
 	 * @return added
 	 */
