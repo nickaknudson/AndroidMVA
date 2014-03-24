@@ -35,6 +35,7 @@ public abstract class CollectionViewAdapter<M extends Model<M>> extends BaseAdap
 		setActivity(activity);
 		generateViewTS(activity.getLayoutInflater(), root);
 		setCollection(collection);
+		notifyDataSetInvalidatedTS();
 	}
 	
 	/**
@@ -46,6 +47,7 @@ public abstract class CollectionViewAdapter<M extends Model<M>> extends BaseAdap
 		setActivity(activity);
 		setView(convertView);
 		setCollection(collection);
+		notifyDataSetInvalidatedTS();
 	}
 	
 	protected Activity getActivity() {
@@ -222,7 +224,7 @@ public abstract class CollectionViewAdapter<M extends Model<M>> extends BaseAdap
 	public abstract View getView(Activity activity, ViewGroup root, M model);
 	
 	/**
-	 * Refresh the view by calling it's {@link #fillView} method
+	 * Refresh the view by calling it's {@link #notifyDataSetChanged} method
 	 */
 	public void refresh() {
 		notifyDataSetChangedTS();

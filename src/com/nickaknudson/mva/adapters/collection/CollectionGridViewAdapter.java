@@ -26,7 +26,7 @@ public abstract class CollectionGridViewAdapter<M extends Model<M>> extends Coll
 	 * @param convertView
 	 * @param collection
 	 */
-	public CollectionGridViewAdapter(Activity activity, View convertView, Collection<M> collection) {
+	public CollectionGridViewAdapter(Activity activity, GridView convertView, Collection<M> collection) {
 		super(activity, convertView, collection);
 	}
 
