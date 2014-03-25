@@ -59,12 +59,16 @@ public abstract class ModelViewAdapter<M extends Model<M>> extends ViewAdapter i
 	private ModelObserver<M> objectObserver = new ModelObserver<M>(){
 		@Override
 		public void onChange(M model, Object data) {
-			refresh();
 			onModelChange(model, data);
+			refresh();
 		}
 	};
 
 	/**
+	 * This method is provided for convenience.
+	 * {@link #refresh()} will be called for you automatically.
+	 * This is called before refresh().
+	 * 
 	 * @param model
 	 * @param data
 	 */

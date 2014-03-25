@@ -176,6 +176,14 @@ public abstract class CollectionViewAdapter<M extends Model<M>> extends BaseAdap
 		}
 	};
 	
+	/**
+	 * This method is provided for convenience.
+	 * {@link notifyChangedTS} will be called for you automatically.
+	 * This is called before notiftyDataSetChangedTS().
+	 * 
+	 * @param collection
+	 * @param data
+	 */
 	protected abstract void onCollectionChange(Collection<M> collection, Object data);
 	
 	@Override
