@@ -6,12 +6,18 @@ package com.nickaknudson.mva.clients.sqlite;
 import java.lang.reflect.Type;
 
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 
+import com.nickaknudson.mva.Collection;
 import com.nickaknudson.mva.Model;
+import com.nickaknudson.mva.callbacks.CreateCallback;
+import com.nickaknudson.mva.callbacks.DestroyCallback;
+import com.nickaknudson.mva.callbacks.IndexCallback;
 import com.nickaknudson.mva.callbacks.PersistentCallback;
 import com.nickaknudson.mva.callbacks.PersistentCallbackManager;
+import com.nickaknudson.mva.callbacks.ReadCallback;
+import com.nickaknudson.mva.callbacks.UpdateCallback;
 import com.nickaknudson.mva.clients.CRUDClient;
+import com.nickaknudson.mva.clients.IndexClient;
 import com.nickaknudson.mva.clients.PersistentClient;
 import com.nickaknudson.mva.exceptions.NotConnectedException;
 
@@ -20,16 +26,13 @@ import com.nickaknudson.mva.exceptions.NotConnectedException;
  * @param <M> 
  * @param <H> 
  */
-public abstract class SQLiteDatabaseClient<M extends Model<M>, H extends SQLiteOpenHelper> implements CRUDClient<M>, PersistentClient {
+public abstract class SQLiteDatabaseClient<M extends Model<M>> implements IndexClient<M>, CRUDClient<M>, PersistentClient {
 
 	private PersistentCallbackManager pcallbacks = new PersistentCallbackManager();
-	private H helper;
+	private SQLiteDatabaseClientHelper helper;
 	private SQLiteDatabase db;
 	private boolean connected = false;
-
-	/* (non-Javadoc)
-	 * @see com.nickaknudson.mva.clients.PersistentClient#connect(com.nickaknudson.mva.callbacks.PersistentCallback)
-	 */
+	
 	@Override
 	public void connect(PersistentCallback callback) {
 		add(callback);
@@ -37,7 +40,7 @@ public abstract class SQLiteDatabaseClient<M extends Model<M>, H extends SQLiteO
 			public void run() {
 				try {
 					db = helper.getWritableDatabase();
-					connected  = true;
+					connected = true;
 					pcallbacks.onConnected();
 				} catch (Exception e) {
 					pcallbacks.onError(e);
@@ -47,34 +50,22 @@ public abstract class SQLiteDatabaseClient<M extends Model<M>, H extends SQLiteO
 		thread.start();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.nickaknudson.mva.clients.PersistentClient#addConnectCallback(com.nickaknudson.mva.callbacks.PersistentCallback)
-	 */
 	@Override
 	public boolean add(PersistentCallback callback) {
 		return pcallbacks.add(callback);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.nickaknudson.mva.clients.PersistentClient#removeConnectCallback(com.nickaknudson.mva.callbacks.PersistentCallback)
-	 */
 	@Override
 	public boolean remove(PersistentCallback callback) {
 		return pcallbacks.remove(callback);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.nickaknudson.mva.clients.PersistentClient#disconnect()
-	 */
 	@Override
 	public void disconnect() {
 		connected = false;
 		db.close();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.nickaknudson.mva.clients.PersistentClient#isConnected()
-	 */
 	@Override
 	public boolean isConnected() {
 		return connected;
@@ -91,14 +82,14 @@ public abstract class SQLiteDatabaseClient<M extends Model<M>, H extends SQLiteO
 	/**
 	 * @return helper
 	 */
-	public H getHelper() {
+	public SQLiteDatabaseClientHelper getHelper() {
 		return helper;
 	}
 
 	/**
 	 * @param helper
 	 */
-	public void setHelper(H helper) {
+	public void setHelper(SQLiteDatabaseClientHelper helper) {
 		this.helper = helper;
 	}
 
@@ -108,4 +99,64 @@ public abstract class SQLiteDatabaseClient<M extends Model<M>, H extends SQLiteO
 	public Type getType() {
 		return getTypeToken().getType();
 	}
+
+	@Override
+	public void index(Collection<M> collection, IndexCallback<M> callback) {
+		try {
+			SQLiteDatabase db = getDB();
+			index(db, collection, callback);
+		} catch(Exception e) {
+			if(callback != null) callback.onError(e);
+		}
+	}
+
+	protected abstract void index(SQLiteDatabase db, Collection<M> collection, IndexCallback<M> callback);
+
+	@Override
+	public void create(M model, CreateCallback<M> callback) {
+		try {
+			SQLiteDatabase db = getDB();
+			create(db, model, callback);
+		} catch(Exception e) {
+			if(callback != null) callback.onError(e);
+		}
+	}
+
+	protected abstract void create(SQLiteDatabase db, M model, CreateCallback<M> callback);
+
+	@Override
+	public void read(M model, ReadCallback<M> callback) {
+		try {
+			SQLiteDatabase db = getDB();
+			read(db, model, callback);
+		} catch(Exception e) {
+			if(callback != null) callback.onError(e);
+		}
+	}
+
+	protected abstract void read(SQLiteDatabase db, M model, ReadCallback<M> callback);
+
+	@Override
+	public void update(M model, UpdateCallback<M> callback) {
+		try {
+			SQLiteDatabase db = getDB();
+			update(db, model, callback);
+		} catch(Exception e) {
+			if(callback != null) callback.onError(e);
+		}
+	}
+
+	protected abstract void update(SQLiteDatabase db, M model, UpdateCallback<M> callback);
+
+	@Override
+	public void destroy(M model, DestroyCallback<M> callback) {
+		try {
+			SQLiteDatabase db = getDB();
+			destroy(db, model, callback);
+		} catch(Exception e) {
+			if(callback != null) callback.onError(e);
+		}
+	}
+
+	protected abstract void destroy(SQLiteDatabase db, M model, DestroyCallback<M> callback);
 }
