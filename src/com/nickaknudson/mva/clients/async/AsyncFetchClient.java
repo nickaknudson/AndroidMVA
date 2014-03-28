@@ -18,7 +18,7 @@ import com.nickaknudson.mva.clients.FetchClient;
  *
  * @param <M>
  */
-public abstract class AndroidAsyncFetchClient<M extends Model<M>> implements FetchClient<M> {
+public abstract class AsyncFetchClient<M extends Model<M>> implements FetchClient<M> {
 	
 	private Gson gson = new Gson();
 

@@ -20,7 +20,7 @@ import com.nickaknudson.mva.clients.SendClient;
  *
  * @param <M>
  */
-public abstract class AndroidAsyncSendClient<M extends Model<M>> implements SendClient<M> {
+public abstract class AsyncSendClient<M extends Model<M>> implements SendClient<M> {
 	
 	private Gson gson = new Gson();
 

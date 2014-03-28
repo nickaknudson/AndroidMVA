@@ -18,7 +18,7 @@ import com.nickaknudson.mva.clients.IndexClient;
  * @author nick
  * @param <M> model type for collection
  */
-public abstract class AndroidAsyncIndexClient<M extends Model<M>> implements IndexClient<M> {
+public abstract class AsyncIndexClient<M extends Model<M>> implements IndexClient<M> {
 	
 	private Gson gson = new Gson();
 

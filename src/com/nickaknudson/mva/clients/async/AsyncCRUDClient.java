@@ -24,7 +24,7 @@ import com.nickaknudson.mva.clients.CRUDClient;
  *
  * @param <M>
  */
-public abstract class AndroidAsyncCRUDClient<M extends Model<M>> implements CRUDClient<M> {
+public abstract class AsyncCRUDClient<M extends Model<M>> implements CRUDClient<M> {
 	
 	private Gson gson = new Gson();
 
