@@ -32,9 +32,6 @@ public abstract class SimpleSharedPreferencesCRUDClient<M extends Model<M>> exte
 		super(context);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.nickaknudson.mva.clients.preferences.SharedPreferencesCRUDClient#create(com.nickaknudson.mva.Model, android.content.SharedPreferences, com.nickaknudson.mva.callbacks.CreateCallback)
-	 */
 	@Override
 	protected void create(M model, SharedPreferences sharedPreferences, CreateCallback<M> callback) {
 		try {
@@ -48,9 +45,6 @@ public abstract class SimpleSharedPreferencesCRUDClient<M extends Model<M>> exte
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see com.nickaknudson.mva.clients.preferences.SharedPreferencesCRUDClient#read(com.nickaknudson.mva.Model, android.content.SharedPreferences, com.nickaknudson.mva.callbacks.ReadCallback)
-	 */
 	@Override
 	protected void read(M model, SharedPreferences sharedPreferences, ReadCallback<M> callback) {
 		try {
@@ -66,9 +60,6 @@ public abstract class SimpleSharedPreferencesCRUDClient<M extends Model<M>> exte
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see com.nickaknudson.mva.clients.preferences.SharedPreferencesCRUDClient#update(com.nickaknudson.mva.Model, android.content.SharedPreferences, com.nickaknudson.mva.callbacks.UpdateCallback)
-	 */
 	@Override
 	protected void update(M model, SharedPreferences sharedPreferences, UpdateCallback<M> callback) {
 		try {
@@ -81,5 +72,4 @@ public abstract class SimpleSharedPreferencesCRUDClient<M extends Model<M>> exte
 			if(callback != null) callback.onError(e);
 		}
 	}
-
 }
