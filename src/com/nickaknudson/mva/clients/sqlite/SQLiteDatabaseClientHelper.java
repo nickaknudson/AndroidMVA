@@ -317,6 +317,14 @@ public abstract class SQLiteDatabaseClientHelper {
 		int rows = db.delete(getTableName(), whereClause, whereArgs);
 		delete.onDelete(rows);
 	}
+	
+	/**
+	 * @param context
+	 * @return true if the database was successfully deleted; else false.
+	 */
+	public boolean deleteDatabase(Context context) {
+		return context.deleteDatabase(getDBName());
+	}
 
 	/**
 	 * Something in the form of name.db

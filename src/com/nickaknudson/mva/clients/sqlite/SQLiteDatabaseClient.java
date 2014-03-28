@@ -5,6 +5,7 @@ package com.nickaknudson.mva.clients.sqlite;
 
 import java.lang.reflect.Type;
 
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.nickaknudson.mva.Collection;
@@ -159,4 +160,12 @@ public abstract class SQLiteDatabaseClient<M extends Model<M>> implements IndexC
 	}
 
 	protected abstract void destroy(SQLiteDatabase db, M model, DestroyCallback<M> callback);
+	
+	/**
+	 * @param context
+	 * @return true if the database was successfully deleted; else false.
+	 */
+	public boolean deleteDatabase(Context context) {
+		return helper.deleteDatabase(context);
+	}
 }
