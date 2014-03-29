@@ -40,7 +40,7 @@ public abstract class SQLiteDatabaseClient<M extends Model<M>> implements IndexC
 		Thread thread = new Thread() {
 			public void run() {
 				try {
-					db = helper.getWritableDatabase();
+					db = helper.getReadableDatabase();
 					connected = true;
 					pcallbacks.onConnected();
 				} catch (Exception e) {
@@ -78,6 +78,27 @@ public abstract class SQLiteDatabaseClient<M extends Model<M>> implements IndexC
 		} else {
 			throw new NotConnectedException();
 		}
+	}
+	
+	/**
+	 * @throws NotConnectedException
+	 */
+	public void beginTransaction() throws NotConnectedException {
+		getDB().beginTransaction();
+	}
+	
+	/**
+	 * @throws NotConnectedException
+	 */
+	public void setTransactionSuccessful() throws NotConnectedException {
+		getDB().setTransactionSuccessful();
+	}
+	
+	/**
+	 * @throws NotConnectedException
+	 */
+	public void endTransaction() throws NotConnectedException {
+		getDB().endTransaction();
 	}
 
 	/**

@@ -75,6 +75,13 @@ public abstract class SQLiteDatabaseClientHelper {
 	}
 	
 	/**
+	 * @return database
+	 */
+	public SQLiteDatabase getReadableDatabase() {
+		return helper.getReadableDatabase();
+	}
+	
+	/**
 	 * @author nick
 	 */
 	public interface DBInsertCallback extends ErrorCallback {
@@ -190,16 +197,16 @@ public abstract class SQLiteDatabaseClientHelper {
 				if(columnIndex > -1) {
 					switch(info.columnType()) {
 					case STRING:
-						query.value(j, columnIndex, c.getString(i));
+						query.value(j, i, c.getString(columnIndex));
 						break;
 					case INTEGER:
-						query.value(j, columnIndex, c.getInt(i));
+						query.value(j, i, c.getInt(columnIndex));
 						break;
 					case LONG:
-						query.value(j, columnIndex, c.getLong(i));
+						query.value(j, i, c.getLong(columnIndex));
 						break;
 					case BOOLEAN:
-						query.value(j, columnIndex, (c.getInt(i) == 1) ? true : false);
+						query.value(j, i, (c.getInt(columnIndex) == 1) ? true : false);
 						break;
 					}
 				}
